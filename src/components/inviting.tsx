@@ -11,7 +11,7 @@ import "taro-ui/dist/style/components/tab-bar.scss";
 import "taro-ui/dist/style/components/flex.scss";
 import "taro-ui/dist/style/components/list.scss";
 
-export default class Writing extends Component {
+export default class Inviting extends Component {
 
   constructor() {
     super(...arguments)
@@ -63,11 +63,11 @@ export default class Writing extends Component {
         </AtNoticebar>
 
         <AtList>
-        <AtListItem title='2021年12月英语六级写作' note='描述信息' />
-        <AtListItem title='2021年12月英语六级写作' note='描述信息'  />
+        <AtListItem title='2021年12月英语六级听力' note='描述信息' />
+        <AtListItem title='2021年12月英语六级听力' note='描述信息'  />
         <AtListItem
           note='描述信息'
-          title='2021年12月英语六级写作'
+          title='2021年12月英语六级听力'
           extraText='...'
         />
       </AtList>

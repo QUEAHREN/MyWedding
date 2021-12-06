@@ -1,9 +1,11 @@
 import { Component } from 'react'
-import { View, Text } from '@tarojs/components'
-import Listening from '../components/listening'
-import Writing from '../components/writing'
-import Usercenter from '../components/usercenter'
 import { AtTabBar} from 'taro-ui'
+import { View, Text } from '@tarojs/components'
+import Navigation from '../components/navigation'
+import Usercenter from '../components/usercenter'
+import Messages from '../components/messages'
+import Inviting from '../components/inviting'
+import Album from '../components/album'
 
 interface isState {
   current: number
@@ -25,20 +27,16 @@ export default class Index extends Component<any, isState> {
   }
 
   showContent=()=>{
-    if (this.state.current === 0)  return (<Listening/>);
-    if (this.state.current === 1)  return (<Writing/>);
-    if (this.state.current === 2)  return (<Usercenter/>);
+    if (this.state.current === 0)  return (<Inviting/>);
+    if (this.state.current === 1)  return (<Album/>);
+    if (this.state.current === 2)  return (<Navigation/>);
+    if (this.state.current === 3)  return (<Messages/>);
+    if (this.state.current === 4)  return (<Usercenter/>);
   }
 
-  componentWillMount() { }
 
   componentDidMount() { }
 
-  componentWillUnmount() { }
-
-  componentDidShow() { }
-
-  componentDidHide() { }
 
   render() {
     return (
@@ -48,8 +46,10 @@ export default class Index extends Component<any, isState> {
         <AtTabBar
           fixed
           tabList={[
-            { title: '听力', iconType: 'sound' },
-            { title: '写作', iconType: 'edit' },
+            { title: '邀请函', iconType: 'mail' },
+            { title: '相册', iconType: 'image' },
+            { title: '导航', iconType: 'map-pin' },
+            { title: '祝福', iconType: 'message' },
             { title: '我的', iconType: 'user' }
           ]}
           onClick={this.handleClick.bind(this)}
