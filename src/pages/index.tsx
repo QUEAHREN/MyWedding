@@ -27,7 +27,7 @@ export default class Index extends Component<any, isState> {
   showContent=()=>{
     if (this.state.current === 0)  return (<Listening/>);
     if (this.state.current === 1)  return (<Writing/>);
-    if (this.state.current === 1)  return (<Usercenter/>);
+    if (this.state.current === 2)  return (<Usercenter/>);
   }
 
   componentWillMount() { }

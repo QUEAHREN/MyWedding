@@ -1,34 +1,43 @@
 import { Component } from 'react'
-import { View, Text } from '@tarojs/components'
-import { AtNoticebar, AtTabBar,AtList, AtListItem  } from 'taro-ui'
-import { Swiper, SwiperItem } from '@tarojs/components'
-import "../css/index.scss"
-import "taro-ui/dist/style/components/noticebar.scss";
-import "taro-ui/dist/style/components/button.scss"
-import "taro-ui/dist/style/components/icon.scss";
-import "taro-ui/dist/style/components/badge.scss";
-import "taro-ui/dist/style/components/tab-bar.scss";
-import "taro-ui/dist/style/components/flex.scss";
-import "taro-ui/dist/style/components/list.scss";
+import { View, Text, OpenData } from '@tarojs/components'
+import { AtAvatar } from 'taro-ui'
+import "taro-ui/dist/style/components/avatar.scss";
+import Taro, { UserInfo } from '@tarojs/taro';
+interface isState {
+  avatarUrl: string
+  nickName: string
+  hasUserInfo: boolean
+}
 
-export default class Usercenter extends Component {
+export default class Usercenter extends Component<any, isState> {
 
   constructor() {
     super(...arguments)
     this.state = {
-      current: 0
+      avatarUrl: '',
+      nickName: '暂未登录',
+      hasUserInfo: false
     }
   }
 
-  handleClick(value) {
-    this.setState({
-      current: value
+
+
+  componentDidMount() { 
+
+    Taro.getUserProfile({
+      desc: ' 用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+      success: (res) => {
+        var userInfo = res.userInfo
+        this.setState({
+          avatarUrl: userInfo.avatarUrl,
+          nickName: userInfo.nickName,
+          hasUserInfo: true
+        })
+
+        console.log(userInfo)
+      }
     })
   }
-
-  componentWillMount() { }
-
-  componentDidMount() { }
 
   componentWillUnmount() { }
 
@@ -39,7 +48,8 @@ export default class Usercenter extends Component {
   render() {
     return (
       <View>
-        123
+        <AtAvatar image={this.state.avatarUrl}></AtAvatar>
+        <Text>{this.state.nickName}</Text>
       </View>
     )
   }
