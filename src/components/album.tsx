@@ -2,7 +2,6 @@ import { Component } from 'react'
 import { View, Text } from '@tarojs/components'
 import { AtNoticebar, AtTabBar,AtList, AtListItem  } from 'taro-ui'
 import { Swiper, SwiperItem } from '@tarojs/components'
-import "../css/index.scss"
 import "taro-ui/dist/style/components/noticebar.scss";
 import "taro-ui/dist/style/components/button.scss"
 import "taro-ui/dist/style/components/icon.scss";

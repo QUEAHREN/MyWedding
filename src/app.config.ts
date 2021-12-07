@@ -1,6 +1,7 @@
 export default {
   pages: [
-    'pages/index'
+    'pages/index',
+    'pages/newmessage'
   ],
   window: {
     backgroundTextStyle: 'light',
