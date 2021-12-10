@@ -1,11 +1,11 @@
 import { Component } from 'react'
 import { AtTabBar} from 'taro-ui'
 import { View, Text } from '@tarojs/components'
-import Navigation from '../components/navigation'
-import Usercenter from '../components/usercenter'
-import Messages from '../components/messages'
-import Inviting from '../components/inviting'
-import Album from '../components/album'
+import Navigation from '../components/navigation/navigation'
+import Usercenter from '../components/usercenter/usercenter'
+import Messages from '../components/messages/messages'
+import Inviting from '../components/inviting/inviting'
+import Album from '../components/album/album'
 
 interface isState {
   current: number
