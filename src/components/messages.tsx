@@ -5,6 +5,11 @@ import "taro-ui/dist/style/components/card.scss";
 import "taro-ui/dist/style/components/fab.scss";
 import { ClFloatButton, ClAvatar } from "mp-colorui";
 import Taro from '@tarojs/taro';
+import { AtList, AtListItem } from 'taro-ui'
+import "taro-ui/dist/style/components/icon.scss";
+import "taro-ui/dist/style/components/flex.scss";
+import "taro-ui/dist/style/components/list.scss";
+
 
 export default class Messages extends Component {
 
@@ -52,6 +57,15 @@ export default class Messages extends Component {
         >
           这也是内容区 可以随意定义功能
         </AtCard>
+        <AtList>
+        <AtListItem title='2021年12月英语六级听力' note='描述信息' />
+        <AtListItem title='2021年12月英语六级听力' note='描述信息'  />
+        <AtListItem
+          note='描述信息'
+          title='2021年12月英语六级听力'
+          extraText='...'
+        />
+      </AtList>
         <ClFloatButton
           size='large'
           bgColor='red'

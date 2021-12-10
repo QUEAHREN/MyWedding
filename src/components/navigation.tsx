@@ -9,6 +9,30 @@ import "taro-ui/dist/style/components/badge.scss";
 import "taro-ui/dist/style/components/tab-bar.scss";
 import "taro-ui/dist/style/components/flex.scss";
 import "taro-ui/dist/style/components/list.scss";
+import { Map } from '@tarojs/components'
+const normalCallout = {
+  id: 1,
+  latitude: 23.098994,
+  longitude: 113.32252,
+  callout: {
+    content: '文本内容',
+    color: '#ff0000',
+    fontSize: 14,
+    borderWidth: 2,
+    borderRadius: 10,
+    borderColor: '#000000',
+    bgColor: '#fff',
+    padding: 5,
+    display: 'ALWAYS',
+    textAlign: 'center',
+  }
+}
+
+
+
+const mapMarkers = [
+  normalCallout,
+]
 
 export default class Navigation extends Component {
 
@@ -19,11 +43,8 @@ export default class Navigation extends Component {
     }
   }
 
-  handleClick(value) {
-    this.setState({
-      current: value
-    })
-  }
+
+  onTap () {}
 
   componentWillMount() { }
 
@@ -34,43 +55,18 @@ export default class Navigation extends Component {
   componentDidShow() { }
 
   componentDidHide() { }
-
+  
   render() {
     return (
-      <View>
-        <Swiper
-          className='test-h'
-          indicatorColor='#999'
-          indicatorActiveColor='#333'
-          vertical
-          circular
-          indicatorDots
-          autoplay>
-          <SwiperItem>
-          <View className='demo-text-1'>这里可以放图片</View>
-          </SwiperItem>
-          <SwiperItem>
-            <View className='demo-text-2'>2</View>
-          </SwiperItem>
-          <SwiperItem>
-            <View className='demo-text-3'>3</View>
-          </SwiperItem>
-        </Swiper>
-
-        <AtNoticebar marquee>
-          欢迎使用
-        </AtNoticebar>
-
-        <AtList>
-        <AtListItem title='2021年12月英语六级写作' note='描述信息' />
-        <AtListItem title='2021年12月英语六级写作' note='描述信息'  />
-        <AtListItem
-          note='描述信息'
-          title='2021年12月英语六级写作'
-          extraText='...'
-        />
-      </AtList>
-      </View>
+      <Map
+      setting={{}}
+      markers={mapMarkers}
+      latitude={23.096994}
+      longitude={113.324520}
+      enableTraffic='true'
+      style={{ height: '100vh', width: '100vw' }}
+    >
+      </Map>
     )
   }
 }

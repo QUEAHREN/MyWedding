@@ -1,3 +1,3 @@
 export default {
-  navigationBarTitleText: 'SY英语'
+  navigationBarTitleText: ''
 }

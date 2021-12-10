@@ -38,10 +38,11 @@
     "@babel/runtime": "^7.7.7",
     "@tarojs/cli": "3.3.15",
     "@tarojs/components": "3.3.15",
+    "@tarojs/react": "3.3.15",
     "@tarojs/runtime": "3.3.15",
     "@tarojs/taro": "3.3.15",
     "lodash": "4.17.15",
-    "@tarojs/react": "3.3.15",
+    "mp-colorui": "^1.0.0-beta.1",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "taro-ui": "^3.0.0-alpha.3"
