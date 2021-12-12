@@ -15,6 +15,16 @@ image[class*="gif-"] {
 /* =========== */
 /*   Home键   */
 /* =========== */
+.Scancode {
+  
+    font-size: 39rpx;
+    background: #fff;
+    position: fixed;
+    bottom: 10;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
 
 @keyframes scaleDraw {
   0% {

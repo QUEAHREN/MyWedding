@@ -37,11 +37,9 @@ export default class Messages extends Component {
     return (
       <View>
        
+        <ScrollView>
+          
 
-          <view className="bg-img padding-tb-xl" style={{"backgroundImage":" url({{topImg}})",height: "414rpx;"}}>
-          </view>
- 
-          <view className="title margin-top">1231231</view>
 
           {/* <!-- =============评论部分开始============= --> */}
           <view className="cu-bar bg-white align-center margin-top">
@@ -52,15 +50,7 @@ export default class Messages extends Component {
           </view>
 
 
-          <view className="cu-bar input" >
-
-            <view className="flex justify-center" style={{'width':'100%'}} >
-              <view>
-                <button className="cu-btn bg-blue shadow-blur round" role="button" aria-disabled="false" >授权后可留言</button>
-              </view>
-            </view>
-            
-          </view>
+  
 
           <view className="margin-bottom me-bgcolor">
             <view className="margin-sm flex flex-wrap align-center" >
@@ -124,11 +114,52 @@ export default class Messages extends Component {
           
                 <view className="bd-hr"></view>
               </Block>
+              <Block >
+                <view className="basis-xs">
+                  <view className="cu-avatar lg round margin-left-sm" ></view>
+                </view>
+                <view className="grid col-1 basis-xl" style={{minHeight:'120rpx'}}>
+                  <view className="padding-xs">
+                    <text className="text-black text-bold">xxx</text>
+                    <view className="fr text-xs" style={{lineHeight: "32rpx"}}>
+                      <text className="text-grey">123</text>
+                    </view>
+                  </view>
+                  <view className="padding-sm">
+                    <text className="text-sm">123123</text>
+        
+                  </view>
+                </view>
+
+          
+                <view className="bd-hr"></view>
+              </Block>
+              <Block >
+                <view className="basis-xs">
+                  <view className="cu-avatar lg round margin-left-sm" ></view>
+                </view>
+                <view className="grid col-1 basis-xl" style={{minHeight:'120rpx'}}>
+                  <view className="padding-xs">
+                    <text className="text-black text-bold">xxx</text>
+                    <view className="fr text-xs" style={{lineHeight: "32rpx"}}>
+                      <text className="text-grey">123</text>
+                    </view>
+                  </view>
+                  <view className="padding-sm">
+                    <text className="text-sm">123123</text>
+        
+                  </view>
+                </view>
+
+          
+                <view className="bd-hr"></view>
+              </Block>
+             
             </view>
           </view>
           <view style={{height:"50px"}}></view>
-        
-        <ClFloatButton
+          </ScrollView>
+        <ClFloatButton className="Scancode"
           size='large'
           bgColor='red'
           closeWithShadow

@@ -10,6 +10,8 @@ import "taro-ui/dist/style/components/tab-bar.scss";
 import "taro-ui/dist/style/components/flex.scss";
 import "taro-ui/dist/style/components/list.scss";
 import { Map } from '@tarojs/components'
+import Taro from '@tarojs/taro'
+
 const normalCallout = {
   id: 1,
   latitude: 23.098994,
@@ -34,12 +36,18 @@ const mapMarkers = [
   normalCallout,
 ]
 
-export default class Navigation extends Component {
+interface isState {
+  latitude:number,
+  longitude:number
+}
+
+export default class Navigation extends Component<any, isState> {
 
   constructor() {
     super(...arguments)
     this.state = {
-      current: 0
+      latitude:30,
+      longitude:110
     }
   }
 
@@ -48,7 +56,28 @@ export default class Navigation extends Component {
 
   componentWillMount() { }
 
-  componentDidMount() { }
+  componentDidMount() { 
+
+
+    Taro.request({
+      url: 'http://127.0.0.1:5000/navigation', 
+      method:'GET' ,
+      data:{
+        'wedding_id':123321,
+      },
+      header: {
+        'content-type': 'application/json' 
+      },
+      success: function (res) {
+        
+        console.log(res.data)
+      }
+    })
+    this.setState({
+      latitude: res.data.latitude,
+      longitude: res.data.longitude
+    })
+  }
 
   componentWillUnmount() { }
 
@@ -60,9 +89,9 @@ export default class Navigation extends Component {
     return (
       <Map
       setting={{}}
-      markers={mapMarkers}
-      latitude={23.096994}
-      longitude={113.324520}
+      // markers={mapMarkers}
+      latitude={this.state.latitude}
+      longitude={this.state.longitude}
       enableTraffic='true'
       style={{ height: '100vh', width: '100vw' }}
     >
