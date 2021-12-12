@@ -1,8 +1,10 @@
 import { Component } from 'react'
-import { View, Text, OpenData } from '@tarojs/components'
+import { View, Text, Button } from '@tarojs/components'
 import { AtAvatar } from 'taro-ui'
 import "taro-ui/dist/style/components/avatar.scss";
 import Taro, { UserInfo } from '@tarojs/taro';
+import '../../model/opStorage'
+import { getWeddingID, setWeddingID } from '../../model/opStorage';
 interface isState {
   avatarUrl: string
   nickName: string
@@ -39,17 +41,20 @@ export default class Usercenter extends Component<any, isState> {
     })
   }
 
-  componentWillUnmount() { }
+  handleSetWeddingID=()=>{
 
-  componentDidShow() { }
+    setWeddingID(123321)
+    
 
-  componentDidHide() { }
+  }
+  
 
   render() {
     return (
       <View>
         <AtAvatar image={this.state.avatarUrl}></AtAvatar>
         <Text>{this.state.nickName}</Text>
+        <Button onClick={this.handleSetWeddingID}>请输入婚礼ID</Button>
       </View>
     )
   }

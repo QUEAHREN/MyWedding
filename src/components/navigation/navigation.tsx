@@ -11,30 +11,8 @@ import Taro from '@tarojs/taro'
 import callHe from '../../assets/img/icon-call-he.png';
 import callShe from '../../assets/img/icon-call-she.png';
 import './navigation.scss'
-
-const normalCallout = {
-  id: 1,
-  latitude: 23.098994,
-  longitude: 113.32252,
-  callout: {
-    content: '文本内容',
-    color: '#ff0000',
-    fontSize: 14,
-    borderWidth: 2,
-    borderRadius: 10,
-    borderColor: '#000000',
-    bgColor: '#fff',
-    padding: 5,
-    display: 'ALWAYS',
-    textAlign: 'center',
-  }
-}
-
-
-
-const mapMarkers = [
-  normalCallout,
-]
+import '../../model/opStorage'
+import { getWeddingID } from '../../model/opStorage';
 
 interface isState {
   wedding_id: number,
@@ -48,7 +26,7 @@ export default class Navigation extends Component<any, isState> {
   constructor() {
     super(...arguments)
     this.state = {
-      wedding_id: 123321,
+      wedding_id: getWeddingID(),
       latitude: 39.90960456049752,
       longitude: 116.3972282409668,
       content:"天安门"
@@ -58,6 +36,7 @@ export default class Navigation extends Component<any, isState> {
   componentDidMount() {
 
     const _this = this
+
     Taro.request({
       url: 'http://127.0.0.1:5000/navigation',
       method: 'GET',
