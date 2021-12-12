@@ -14,7 +14,7 @@ export const getWeddingID = () => {
 
  
 // 保存wedding_id
-export const setWeddingID = (wedding_id:number) => {
+export const setWeddingID = (wedding_id:string) => {
 
     Taro.setStorage({
         key:"wedding_id",
