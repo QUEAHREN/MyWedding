@@ -73,7 +73,7 @@ export default class Messages extends Component<any, isState> {
         return (
             <View className='msg-item' key={Math.random() * Math.random()}>
                 <View className='msg-item__user-avatar'>
-                    <Image className='msg-item__user-avatar-img' src={item.headshots} />
+                    <Image className='msg-item__user-avatar-img' src={item.avaterUrl} />
                 </View>
                 <View className='msg-item__desc'>
                     <View className='msg-item__user-info'>

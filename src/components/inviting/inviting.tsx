@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { View, Text } from '@tarojs/components'
+import { View, ScrollView, Image } from '@tarojs/components'
 import { AtNoticebar, AtTabBar, AtList, AtListItem } from 'taro-ui'
 import { Swiper, SwiperItem } from '@tarojs/components'
 import "taro-ui/dist/style/components/noticebar.scss";
@@ -27,25 +27,7 @@ export default class Inviting extends Component {
   }
 
 
-  componentWillMount() { 
-
-    // Taro.request({
-    //   url: 'http://127.0.0.1:5000/msgs', //仅为示例，并非真实的接口地址
-    //   method:'POST' ,
-    //   data:{
-    //     'wedding_id':123321,
-    //     'nickname':'aowu',
-    //     'headshots':'www/',
-    //     'context':'我喜欢你~',
-    //     'time':'2020-1-1 21:00'
-    //   },
-    //   header: {
-    //     'content-type': 'application/json' // 默认值
-    //   },
-    //   success: function (res) {
-    //     console.log(res.data)
-    //   }
-    // })
+  componentWillMount() {
 
   }
 
@@ -59,40 +41,22 @@ export default class Inviting extends Component {
 
   render() {
     return (
-      <View>
-        <Swiper
-          className='test-h'
-          indicatorColor='#999'
-          indicatorActiveColor='#333'
-          vertical
-          circular
-          indicatorDots
-          autoplay>
-          <SwiperItem>
-            <View className='demo-text-1'>这里可以放图片</View>
-          </SwiperItem>
-          <SwiperItem>
-            <View className='demo-text-2'>2</View>
-          </SwiperItem>
-          <SwiperItem>
-            <View className='demo-text-3'>3</View>
-          </SwiperItem>
-        </Swiper>
+      <View style={{
+        'width': '100%',
+        'height': '100%',
+        'position': 'absolute',
+        'zIndex': '-99999'
+      }}>
+        <Image
+          style={{
+            'height': '88%',
+            'width': '100%'
 
-        <AtNoticebar marquee>
-          欢迎使用
-        </AtNoticebar>
-
-        <AtList>
-          <AtListItem title='2021年12月英语六级听力' note='描述信息' />
-          <AtListItem title='2021年12月英语六级听力' note='描述信息' />
-          <AtListItem
-            note='描述信息'
-            title='2021年12月英语六级听力'
-            extraText='...'
-          />
-        </AtList>
+          }}
+          mode="aspectFit"
+          src='https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg1.maka.im%2Fuser%2F5096755%2Fposter%2FT_TLZUXGWQ%2FT_TLZUXGWQ_v2.jpg&refer=http%3A%2F%2Fimg1.maka.im&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1641956821&t=8914ca2f1fc0d7e202826ae59d55fc3e' />
       </View>
+
     )
   }
 }
