@@ -6,6 +6,7 @@ import callShe from '../../assets/img/icon-call-she.png';
 import './navigation.scss'
 import '../../model/opStorage'
 import { getWeddingID } from '../../model/opStorage';
+import { isEmpty } from 'lodash';
 
 interface isState {
   weddingID: string,
@@ -26,10 +27,24 @@ export default class Navigation extends Component<any, isState> {
     }
   }
 
-  componentWillMount() {
+  componentDidShow() {
 
     const _this = this
+    _this.setState({
+      weddingID: getWeddingID(),
+      latitude: 39.90960456049752,
+      longitude: 116.3972282409668,
+      content:"天安门"
+      })
 
+    if (isEmpty(getWeddingID())){
+      setTimeout(function () {
+        Taro.switchTab({
+          url: '/pages/usercenter/usercenter'
+        })
+      }, 3000)
+      
+    }
     Taro.request({
       url: 'http://127.0.0.1:5000/navigation',
       method: 'GET',

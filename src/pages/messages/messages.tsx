@@ -5,6 +5,7 @@ import './messages.scss'
 import { ClFloatButton } from "mp-colorui";
 import { getWeddingID, getUserInfo } from '../../model/opStorage'
 import { AtFloatLayout, AtPagination, AtForm, AtInput, AtTextarea, AtMessage } from "taro-ui"
+import { isEmpty } from 'lodash';
 
 
 interface isState {
@@ -63,22 +64,41 @@ export default class Messages extends Component<any, isState> {
   }
 
 
-  componentDidMount() {
+  componentDidShow() {
 
     const _this = this
+    _this.setState({
+      weddingID: getWeddingID(),
+      msgList: [],
+      total: 0,
+      current: 1,
+      addMsg: false,
+      attendWedding: false,
+      newMessage: '',
+      nickName: '',
+      avatarUrl: '',
+    })
+
+    if (isEmpty(getWeddingID())) {
+      setTimeout(function () {
+        Taro.switchTab({
+          url: '/pages/usercenter/usercenter'
+        })
+      }, 3000)
+    }
 
     if (_this.state.weddingID === '')
       Taro.navigateTo({
-        url:"/pages/navigation/navigation"
+        url: "/pages/usercenter/usercenter"
       })
     _this.onLoadMsg(1);
 
 
-    let userInfo = getUserInfo();
-    _this.setState({
-      avatarUrl: userInfo.avatarUrl,
-      nickName: userInfo.nickName
-    })
+    // let userInfo = getUserInfo();
+    // _this.setState({
+    //   avatarUrl: userInfo.avatarUrl,
+    //   nickName: userInfo.nickName
+    // })
 
   }
 
@@ -104,8 +124,7 @@ export default class Messages extends Component<any, isState> {
       if (item.msgNumber)
         return (
           <View className='msg-item' key={Math.random() * Math.random()}>
-            <View className='msg-item__desc'>
-            </View>
+
           </View>
         )
       else
@@ -138,15 +157,7 @@ export default class Messages extends Component<any, isState> {
     })
 
   }
-  onShareAppMessage() {
-    const {
-      invite
-    } = this.props;
-    return {
-      title: `诚邀您参加的婚礼`,
-      path: '/pages/Index/index',
-    }
-  }
+
   handleInputChange() {
 
   }

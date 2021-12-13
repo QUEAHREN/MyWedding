@@ -39,6 +39,6 @@ export default {
       pagePath: "pages/usercenter/usercenter",
       text: "我的"
     }
-    ],
+    ]
   }
 }

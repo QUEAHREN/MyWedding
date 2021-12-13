@@ -32,7 +32,7 @@ export default class Usercenter extends Component<any, isState> {
 
 
 
-  componentDidMount() {
+  componentDidShow() {
 
     const _this = this
 
@@ -41,7 +41,7 @@ export default class Usercenter extends Component<any, isState> {
         content: '修改当前加入婚礼:' + getWeddingID()
       })
     }
-
+ 
     let userInfo = getUserInfo();
     setTimeout(function () {
       _this.setState({
