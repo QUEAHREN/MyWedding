@@ -3,8 +3,8 @@ import { View, Image, Button, Text } from '@tarojs/components'
 import Taro, { Current } from '@tarojs/taro';
 import './messages.scss'
 import { ClFloatButton } from "mp-colorui";
-import { getWeddingID } from '../../model/opStorage'
-import { AtFloatLayout, AtPagination, AtForm, AtInput, AtTextarea } from "taro-ui"
+import { getWeddingID, getUserInfo } from '../../model/opStorage'
+import { AtFloatLayout, AtPagination, AtForm, AtInput, AtTextarea, AtMessage } from "taro-ui"
 
 
 interface isState {
@@ -23,7 +23,7 @@ export default class Messages extends Component<any, isState> {
 
   constructor() {
     super(...arguments)
-    this.state = { 
+    this.state = {
       weddingID: getWeddingID(),
       msgList: [],
       total: 0,
@@ -36,11 +36,11 @@ export default class Messages extends Component<any, isState> {
     }
   }
 
-  onLoadMsg = (newcurrent:number) => {
+  onLoadMsg = (newcurrent: number) => {
 
-    
+
     const _this = this
-     
+
     Taro.request({
       url: 'http://127.0.0.1:5000/msgs',
       method: 'GET',
@@ -54,7 +54,7 @@ export default class Messages extends Component<any, isState> {
       success: function (res) {
         _this.setState({
           msgList: res.data,
-          total: res.data[res.data.length-1].msgNumber
+          total: res.data[res.data.length - 1].msgNumber
         })
         console.log(res.data)
       }
@@ -66,34 +66,20 @@ export default class Messages extends Component<any, isState> {
   componentDidMount() {
 
     const _this = this
+
+    if (_this.state.weddingID === '')
+      Taro.navigateTo({
+        url:"/pages/navigation/navigation"
+      })
     _this.onLoadMsg(1);
 
-    Taro.authorize({
-      scope: 'scope.userInfo',
-      success: function (res) {
-        console.log(res)
-      },
-      fail:(res)=>{
-        console.log(res)
-      }
+
+    let userInfo = getUserInfo();
+    _this.setState({
+      avatarUrl: userInfo.avatarUrl,
+      nickName: userInfo.nickName
     })
 
-
-    Taro.getUserInfo({
-      success: (res) => {
-        var userInfo = res.userInfo
-        _this.setState({
-          avatarUrl: userInfo.avatarUrl,
-          nickName: userInfo.nickName,
-        })
-        console.log(userInfo)
-      },
-      fail:()=>{
-        console.log(0)
-      }
-    })
-    
-    
   }
 
 
@@ -115,24 +101,32 @@ export default class Messages extends Component<any, isState> {
     const _this = this
 
     return _this.state.msgList.map((item) => {
-      return (
-        <View className='msg-item' key={Math.random() * Math.random()}>
-          <View className='msg-item__user-avatar'>
-            <Image className='msg-item__user-avatar-img' src={item.avatarUrl} />
-          </View>
-          <View className='msg-item__desc'>
-            <View className='msg-item__user-info'>
-              <View className='msg-item__user-name'>
-                {item.nickname}
-              </View>
-              <View className='msg-item__msg-time'>
-                {item.time}
-              </View>
+      if (item.msgNumber)
+        return (
+          <View className='msg-item' key={Math.random() * Math.random()}>
+            <View className='msg-item__desc'>
             </View>
-            <View className='msg-item__msg-text'>{item.context}</View>
           </View>
-        </View>
-      )
+        )
+      else
+        return (
+          <View className='msg-item' key={Math.random() * Math.random()}>
+            <View className='msg-item__user-avatar'>
+              <Image className='msg-item__user-avatar-img' src={item.avatarUrl} />
+            </View>
+            <View className='msg-item__desc'>
+              <View className='msg-item__user-info'>
+                <View className='msg-item__user-name'>
+                  {item.nickname}
+                </View>
+                <View className='msg-item__msg-time'>
+                  {item.time}
+                </View>
+              </View>
+              <View className='msg-item__msg-text'>{item.context}</View>
+            </View>
+          </View>
+        )
     });
 
   };
@@ -181,12 +175,12 @@ export default class Messages extends Component<any, isState> {
       },
       success: function (res) {
 
-      _this.onLoadMsg(1)
+        _this.onLoadMsg(1)
       }
     })
 
   }
-  handlePageChange=(value)=>{
+  handlePageChange = (value) => {
     console.log(value.current)
     this.setState({
       current: value.current
@@ -198,7 +192,7 @@ export default class Messages extends Component<any, isState> {
   render() {
     return (
       <View>
-        <Button openType="getUserInfo"/>
+        <Button openType="getUserInfo" />
         <AtPagination
           icon
           total={this.state.total}
@@ -267,7 +261,7 @@ export default class Messages extends Component<any, isState> {
           <Button >提交</Button>
 
         </AtFloatLayout>
-
+        <AtMessage />
       </View>
 
 

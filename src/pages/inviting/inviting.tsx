@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import { View, Image } from '@tarojs/components'
-
+import Taro from '@tarojs/taro';
 import {getWeddingID }from '../../model/opStorage';
 
 interface isState {
@@ -8,7 +8,7 @@ interface isState {
   invitationUrl: string
 }
 
-export default class Inviting extends Component {
+export default class Inviting extends Component<any, isState> {
 
   constructor() {
     super(...arguments)
@@ -20,7 +20,25 @@ export default class Inviting extends Component {
 
 
   componentDidMount() { 
+    const _this = this
 
+    Taro.request({
+      url: 'http://127.0.0.1:5000/invitations',
+      method: 'GET',
+      data: {
+        'wedding_id': _this.state.weddingID,
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      success: function (res) {
+        _this.setState({
+          invitationUrl:res.data.invitationUrl
+        })
+        console.log(res.data)
+      }
+      
+    })
     
   }
 
@@ -41,7 +59,7 @@ export default class Inviting extends Component {
 
           }}
           mode="aspectFit"
-          src='https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg1.maka.im%2Fuser%2F5096755%2Fposter%2FT_TLZUXGWQ%2FT_TLZUXGWQ_v2.jpg&refer=http%3A%2F%2Fimg1.maka.im&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1641956821&t=8914ca2f1fc0d7e202826ae59d55fc3e' />
+          src={this.state.invitationUrl} />
       </View>
 
     )

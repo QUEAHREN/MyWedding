@@ -5,24 +5,64 @@ export const getWeddingID = () => {
     try {
         var value = Taro.getStorageSync('wedding_id')
         return value;
-      } catch (e) {
+    } catch (e) {
         return 0
-      }
- 
+    }
+
 };
 
 
- 
 // 保存wedding_id
-export const setWeddingID = (wedding_id:string) => {
+export const setWeddingID = (wedding_id: string) => {
 
     Taro.setStorage({
-        key:"wedding_id",
-        data:wedding_id
-      })
-    
+        key: "wedding_id",
+        data: wedding_id
+    })
+
 };
- 
+
+export const getInfo = (key) => {
+    try {
+        var value = Taro.getStorageSync(key)
+        return value;
+    } catch (e) {
+        return '';
+    }
+
+};
+
+
+export const getUserInfo = () => {
+
+    let nickName = getInfo('nickName')
+    let avatarUrl = getInfo('avatarUrl')
+    if (nickName === '') {
+        Taro.getUserProfile({
+            desc: ' 用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+            success: (res) => {
+                var userInfo = res.userInfo
+                Taro.setStorage({
+                    key: 'avatarUrl',
+                    data: userInfo.avatarUrl,
+                })
+                Taro.setStorage({
+                    key: 'nickName',
+                    data: userInfo.nickName
+
+                })
+                console.log(userInfo)
+            }
+        })
+    }
+    else{
+        return {
+            'nickName':nickName,
+            'avatarUrl':avatarUrl
+        }
+    }
+}
+
 // // 用户登出，删除cookie
 // export const logout = (props) => {
 //     console.log(props)

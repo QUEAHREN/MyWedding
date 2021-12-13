@@ -4,7 +4,7 @@ import { AtAvatar } from 'taro-ui'
 import "taro-ui/dist/style/components/avatar.scss";
 import Taro, { UserInfo } from '@tarojs/taro';
 import '../../model/opStorage'
-import { getWeddingID, setWeddingID } from '../../model/opStorage';
+import { getWeddingID, setWeddingID, getUserInfo } from '../../model/opStorage';
 import { AtFloatLayout, AtInput, AtForm, AtToast, AtMessage } from "taro-ui"
 import { isEmpty } from 'lodash';
 
@@ -12,7 +12,6 @@ import { isEmpty } from 'lodash';
 interface isState {
   avatarUrl: string
   nickName: string
-  hasUserInfo: boolean
   openAF: boolean
   weddingID: string
   content: string
@@ -25,7 +24,6 @@ export default class Usercenter extends Component<any, isState> {
     this.state = {
       avatarUrl: '',
       nickName: '暂未登录',
-      hasUserInfo: false,
       openAF: false,
       weddingID: getWeddingID(),
       content: '加入婚礼',
@@ -43,28 +41,16 @@ export default class Usercenter extends Component<any, isState> {
         content: '修改当前加入婚礼:' + getWeddingID()
       })
     }
-    Taro.authorize({
-      scope: 'scope.userInfo',
-      success: function (res) {
-        console.log(res)
-      },
-      fail:(res)=>{
-        console.log(res)
-      }
-    })
-    // Taro.getUserProfile({
-    //   desc: ' 用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-    //   success: (res) => {
-    //     var userInfo = res.userInfo
-    //     this.setState({
-    //       avatarUrl: userInfo.avatarUrl,
-    //       nickName: userInfo.nickName,
-    //       hasUserInfo: true
-    //     })
 
-    //     console.log(userInfo)
-    //   }
-    // })
+    let userInfo = getUserInfo();
+    setTimeout(function () {
+      _this.setState({
+        avatarUrl: userInfo.avatarUrl,
+        nickName: userInfo.nickName
+      })
+    }, 2000)
+
+    console.log(userInfo)
   }
 
   handleBTClick = () => {
@@ -108,11 +94,11 @@ export default class Usercenter extends Component<any, isState> {
             'type': 'success',
           })
           setTimeout(function () {
-              setWeddingID(_this.state.weddingID)
-              _this.setState({
-                openAF: false,
-                content: '修改当前加入的婚礼:' + getWeddingID()
-              })
+            setWeddingID(_this.state.weddingID)
+            _this.setState({
+              openAF: false,
+              content: '修改当前加入的婚礼:' + getWeddingID()
+            })
           }, 2000)
         }
 
@@ -131,14 +117,14 @@ export default class Usercenter extends Component<any, isState> {
   render() {
     return (
       <View>
-        
+
         <AtAvatar image={this.state.avatarUrl}></AtAvatar>
         <Text>{this.state.nickName}</Text>
         <Button onClick={this.handleBTClick}>{this.state.content}</Button>
-        <Button openType="getUserInfo"/>
+        <Button openType="getUserInfo" />
         <AtFloatLayout isOpened={this.state.openAF} title="请输入婚礼邀请码" onClose={this.handleAFClose}>
           <AtForm>
-          <Text>{"\n"}</Text>
+            <Text>{"\n"}</Text>
             <AtInput
               name='value2'
               title='婚礼邀请码:'
