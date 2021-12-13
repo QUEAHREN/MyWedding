@@ -1,11 +1,4 @@
 import { Component } from 'react'
-import "taro-ui/dist/style/components/noticebar.scss";
-import "taro-ui/dist/style/components/button.scss"
-import "taro-ui/dist/style/components/icon.scss";
-import "taro-ui/dist/style/components/badge.scss";
-import "taro-ui/dist/style/components/tab-bar.scss";
-import "taro-ui/dist/style/components/flex.scss";
-import "taro-ui/dist/style/components/list.scss";
 import { Button, Text, Image, View, Map } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import callHe from '../../assets/img/icon-call-he.png';
@@ -33,7 +26,7 @@ export default class Navigation extends Component<any, isState> {
     }
   }
 
-  componentDidMount() {
+  componentWillMount() {
 
     const _this = this
 
@@ -52,10 +45,12 @@ export default class Navigation extends Component<any, isState> {
           longitude:res.data.longitude,
           content:res.data.content
         })
-
-        //console.log(res.data)
+        console.log(res.data)
       }
+      
     })
+
+    console.log(_this.state.content)
 
   }
 

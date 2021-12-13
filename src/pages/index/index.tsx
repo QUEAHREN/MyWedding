@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import { AtTabBar} from 'taro-ui'
-import { View, Text } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import Navigation from '../navigation/navigation'
 import Usercenter from '../usercenter/usercenter'
 import Messages from '../messages/messages'

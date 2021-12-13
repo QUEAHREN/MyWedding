@@ -43,20 +43,28 @@ export default class Usercenter extends Component<any, isState> {
         content: '修改当前加入婚礼:' + getWeddingID()
       })
     }
-
-    Taro.getUserProfile({
-      desc: ' 用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-      success: (res) => {
-        var userInfo = res.userInfo
-        this.setState({
-          avatarUrl: userInfo.avatarUrl,
-          nickName: userInfo.nickName,
-          hasUserInfo: true
-        })
-
-        console.log(userInfo)
+    Taro.authorize({
+      scope: 'scope.userInfo',
+      success: function (res) {
+        console.log(res)
+      },
+      fail:(res)=>{
+        console.log(res)
       }
     })
+    // Taro.getUserProfile({
+    //   desc: ' 用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+    //   success: (res) => {
+    //     var userInfo = res.userInfo
+    //     this.setState({
+    //       avatarUrl: userInfo.avatarUrl,
+    //       nickName: userInfo.nickName,
+    //       hasUserInfo: true
+    //     })
+
+    //     console.log(userInfo)
+    //   }
+    // })
   }
 
   handleBTClick = () => {
@@ -123,10 +131,11 @@ export default class Usercenter extends Component<any, isState> {
   render() {
     return (
       <View>
+        
         <AtAvatar image={this.state.avatarUrl}></AtAvatar>
         <Text>{this.state.nickName}</Text>
         <Button onClick={this.handleBTClick}>{this.state.content}</Button>
-
+        <Button openType="getUserInfo"/>
         <AtFloatLayout isOpened={this.state.openAF} title="请输入婚礼邀请码" onClose={this.handleAFClose}>
           <AtForm>
           <Text>{"\n"}</Text>
