@@ -1,14 +1,6 @@
 import { Component } from 'react'
 import { View, Image } from '@tarojs/components'
-import { AtCard } from "taro-ui"
-import "taro-ui/dist/style/components/card.scss";
-import "taro-ui/dist/style/components/fab.scss";
-import { ClFloatButton, ClAvatar } from "mp-colorui";
 import Taro from '@tarojs/taro';
-import { AtList, AtListItem } from 'taro-ui'
-import "taro-ui/dist/style/components/icon.scss";
-import "taro-ui/dist/style/components/flex.scss";
-import "taro-ui/dist/style/components/list.scss";
 import './messages.scss'
 import { getWeddingID }  from '../../model/opStorage'
 
@@ -54,9 +46,7 @@ export default class Messages extends Component<any, isState> {
 
   handleClick(index) {
     if (index === 0) {
-      Taro.navigateTo({
-        url: '../pages/newmessage'
-      })
+      
     }
     if (index === 1) {
 
@@ -67,8 +57,6 @@ export default class Messages extends Component<any, isState> {
 
     const _this = this
 
-    
-    console.log(_this.state.msgList)
     return _this.state.msgList.map((item) => {
         return (
             <View className='msg-item' key={Math.random() * Math.random()}>
@@ -101,7 +89,7 @@ export default class Messages extends Component<any, isState> {
           {this.renderList()}
         </View>
 
-
+      
 
 
       </View>

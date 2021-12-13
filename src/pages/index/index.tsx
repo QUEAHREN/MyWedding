@@ -1,11 +1,10 @@
 import { Component } from 'react'
 import { AtTabBar} from 'taro-ui'
 import { View, Text } from '@tarojs/components'
-import Navigation from '../components/navigation/navigation'
-import Usercenter from '../components/usercenter/usercenter'
-import Messages from '../components/messages/messages'
-import Inviting from '../components/inviting/inviting'
-import Album from '../components/album/album'
+import Navigation from '../navigation/navigation'
+import Usercenter from '../usercenter/usercenter'
+import Messages from '../messages/messages'
+import Inviting from '../inviting/inviting'
 
 interface isState {
   current: number
@@ -28,10 +27,9 @@ export default class Index extends Component<any, isState> {
 
   showContent=()=>{
     if (this.state.current === 0)  return (<Inviting/>);
-    if (this.state.current === 1)  return (<Album/>);
-    if (this.state.current === 2)  return (<Navigation/>);
-    if (this.state.current === 3)  return (<Messages/>);
-    if (this.state.current === 4)  return (<Usercenter/>);
+    if (this.state.current === 1)  return (<Navigation/>);
+    if (this.state.current === 2)  return (<Messages/>);
+    if (this.state.current === 3)  return (<Usercenter/>);
   }
 
 
@@ -47,7 +45,6 @@ export default class Index extends Component<any, isState> {
           fixed
           tabList={[
             { title: '邀请函', iconType: 'mail' },
-            { title: '相册', iconType: 'image' },
             { title: '导航', iconType: 'map-pin' },
             { title: '祝福', iconType: 'message' },
             { title: '我的', iconType: 'user' }
