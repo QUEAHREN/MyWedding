@@ -23,7 +23,7 @@ export default class Navigation extends Component<any, isState> {
       weddingID: getWeddingID(),
       latitude: 39.90960456049752,
       longitude: 116.3972282409668,
-      content:"天安门"
+      content: "天安门"
     }
   }
 
@@ -34,17 +34,17 @@ export default class Navigation extends Component<any, isState> {
       weddingID: getWeddingID(),
       latitude: 39.90960456049752,
       longitude: 116.3972282409668,
-      content:"天安门"
-      })
+      content: "天安门"
+    })
 
-    if (isEmpty(getWeddingID())){
+    if (isEmpty(getWeddingID())) {
       setTimeout(function () {
         Taro.switchTab({
           url: '/pages/usercenter/usercenter'
         })
       }, 3000)
-      
     }
+
     Taro.request({
       url: 'http://127.0.0.1:5000/navigation',
       method: 'GET',
@@ -56,13 +56,13 @@ export default class Navigation extends Component<any, isState> {
       },
       success: function (res) {
         _this.setState({
-          latitude:res.data.latitude,
-          longitude:res.data.longitude,
-          content:res.data.content
+          latitude: res.data.latitude,
+          longitude: res.data.longitude,
+          content: res.data.content
         })
         console.log(res.data)
       }
-      
+
     })
 
     console.log(_this.state.content)
@@ -85,23 +85,23 @@ export default class Navigation extends Component<any, isState> {
             longitude: this.state.longitude,
             latitude: this.state.latitude,
             callout: {
-                content: this.state.content,
-                color: '#fff',
-                bgColor: '#ff4c91',
-                fontSize: 14,
-                textAlign: 'center',
-                padding: 6,
-                borderRadius: 6,
-                display: 'ALWAYS',
+              content: this.state.content,
+              color: '#fff',
+              bgColor: '#ff4c91',
+              fontSize: 14,
+              textAlign: 'center',
+              padding: 6,
+              borderRadius: 6,
+              display: 'ALWAYS',
             },
             width: 28,
             height: 28,
             iconPath: 'https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/wedding/assets/img/icon-nav.png'
-        }]}
-        latitude={this.state.latitude}
-        longitude={this.state.longitude}
-        enableTraffic='true'
-        style={{ height: '100vh', width: '100vw' }}
+          }]}
+          latitude={this.state.latitude}
+          longitude={this.state.longitude}
+          enableTraffic='true'
+          style={{ height: '100vh', width: '100vw' }}
         />
         <View className='location__tool'>
           <View className='location__tool-btn'>

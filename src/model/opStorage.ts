@@ -1,4 +1,5 @@
 import Taro from '@tarojs/taro'
+import { isEmpty } from 'lodash';
 
 // 获取当前用户weddingID
 export const getWeddingID = () => {
@@ -37,7 +38,8 @@ export const getUserInfo = () => {
 
     let nickName = getInfo('nickName')
     let avatarUrl = getInfo('avatarUrl')
-    if (nickName === '') {
+    console.log(nickName)
+    if (isEmpty(nickName)) {
         Taro.getUserProfile({
             desc: ' 用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
             success: (res) => {
@@ -52,6 +54,9 @@ export const getUserInfo = () => {
 
                 })
                 console.log(userInfo)
+            },
+            fail: (res)=>{
+                console.log(res)
             }
         })
     }

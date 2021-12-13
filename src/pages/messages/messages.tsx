@@ -4,7 +4,7 @@ import Taro, { Current } from '@tarojs/taro';
 import './messages.scss'
 import { ClFloatButton } from "mp-colorui";
 import { getWeddingID, getUserInfo } from '../../model/opStorage'
-import { AtFloatLayout, AtPagination, AtForm, AtInput, AtTextarea, AtMessage } from "taro-ui"
+import { AtFloatLayout, AtPagination, AtForm, AtInput, AtTextarea, AtMessage, AtButton } from "taro-ui"
 import { isEmpty } from 'lodash';
 
 
@@ -15,9 +15,10 @@ interface isState {
   current: number,
   addMsg: boolean,
   attendWedding: boolean,
-  newMessage: string,
+  newMessage: any,
   nickName: string,
-  avatarUrl: string
+  avatarUrl: string,
+  attendence: any
 }
 
 export default class Messages extends Component<any, isState> {
@@ -87,18 +88,13 @@ export default class Messages extends Component<any, isState> {
       }, 3000)
     }
 
-    if (_this.state.weddingID === '')
-      Taro.navigateTo({
-        url: "/pages/usercenter/usercenter"
-      })
     _this.onLoadMsg(1);
 
-
-    // let userInfo = getUserInfo();
-    // _this.setState({
-    //   avatarUrl: userInfo.avatarUrl,
-    //   nickName: userInfo.nickName
-    // })
+    let userInfo = getUserInfo();
+    _this.setState({
+      avatarUrl: userInfo.avatarUrl,
+      nickName: userInfo.nickName
+    })
 
   }
 
@@ -168,6 +164,7 @@ export default class Messages extends Component<any, isState> {
     })
   }
 
+
   handleSubmitNewMsg = () => {
 
     const _this = this
@@ -185,19 +182,51 @@ export default class Messages extends Component<any, isState> {
         'content-type': 'application/json'
       },
       success: function (res) {
-
         _this.onLoadMsg(1)
+
+        Taro.atMessage({
+          'message': '成功送上祝福！',
+          'type': 'success',
+        })
+        setTimeout(function () {
+          _this.setState({
+            addMsg: false,
+            newMessage: '',
+            current: 1
+          })
+        }, 2000)
+      },
+      fail: () => {
+        Taro.atMessage({
+          'message': '提交失败',
+          'type': 'error',
+        })
       }
+
     })
 
   }
   handlePageChange = (value) => {
+
     console.log(value.current)
     this.setState({
       current: value.current
     })
     this.onLoadMsg(value.current)
 
+  }
+
+  handleUserinfoClick = () => {
+    const _this = this
+    let userInfo = getUserInfo();
+    _this.setState({
+      avatarUrl: userInfo.avatarUrl,
+      nickName: userInfo.nickName
+    })
+  }
+
+  onSubmit (event) {
+    
   }
 
   render() {
@@ -235,6 +264,7 @@ export default class Messages extends Component<any, isState> {
           ]}
           onActionClick={this.handleActionClick}
           className='button'
+          onClick={this.handleUserinfoClick}
         />
 
         <AtFloatLayout isOpened={this.state.addMsg} title="留下你的祝福吧！" onClose={this.handleAFClose}>
@@ -252,24 +282,24 @@ export default class Messages extends Component<any, isState> {
 
         </AtFloatLayout>
 
-        <AtFloatLayout isOpened={this.state.attendWedding} title="请输入婚礼邀请码" onClose={this.handleAFClose}>
-          <AtForm>
-            <Text>{"\n"}</Text>
+        <AtFloatLayout isOpened={this.state.attendWedding} title="参加婚礼——填写与会人员信息" onClose={this.handleAFClose}>
+          <AtForm
+            onSubmit={this.onSubmit.bind(this)}
+          >
             <AtInput
-              name='value2'
-              title='婚礼邀请码:'
+              name='value'
+              title='文本'
               type='number'
-              placeholder='请输入数字'
-              value={this.state.weddingID}
-              onChange={this.handleInputChange.bind(this)}
-              style={{
-                width: '100%',
-                height: '100px'
-              }}
+              placeholder='单行文本'
+              value={this.state.attendence}
+              onChange={(value) => {
+                  this.setState({
+                    attendence: value
+                  })}}
             />
-            <Text>{"\n"}</Text><Text>{"\n"}</Text><Text>{"\n"}</Text><Text>{"\n"}</Text>
+            <AtButton formType='submit'>提交</AtButton>
+
           </AtForm>
-          <Button >提交</Button>
 
         </AtFloatLayout>
         <AtMessage />
