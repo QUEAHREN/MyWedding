@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { View, Text, ScrollView,Block } from '@tarojs/components'
+import { View, Image } from '@tarojs/components'
 import { AtCard } from "taro-ui"
 import "taro-ui/dist/style/components/card.scss";
 import "taro-ui/dist/style/components/fab.scss";
@@ -10,14 +10,46 @@ import "taro-ui/dist/style/components/icon.scss";
 import "taro-ui/dist/style/components/flex.scss";
 import "taro-ui/dist/style/components/list.scss";
 import './messages.scss'
+import { getWeddingID }  from '../../model/opStorage'
 
-export default class Messages extends Component {
+interface isState {
+  weddingID: string,
+  msgList: any
+}
+
+export default class Messages extends Component<any, isState> {
 
   constructor() {
     super(...arguments)
     this.state = {
-
+      weddingID: getWeddingID(),
+      msgList: []
     }
+  }
+
+  componentDidMount() { 
+    const _this = this
+    Taro.request({
+      url: 'http://127.0.0.1:5000/msgs',
+      method: 'GET',
+      data: {
+        'wedding_id': _this.state.weddingID,
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      success: function (res) {
+
+        _this.setState({
+          msgList:res.data
+        })
+
+        console.log(_this.state.msgList)
+      }
+    })
+
+
+
   }
 
   handleClick(index) {
@@ -31,150 +63,47 @@ export default class Messages extends Component {
     }
   }
 
-  componentDidMount() { }
+  renderList = () => {
+
+    const _this = this
+
+    
+    console.log(_this.state.msgList)
+    return _this.state.msgList.map((item) => {
+        return (
+            <View className='msg-item' key={Math.random() * Math.random()}>
+                <View className='msg-item__user-avatar'>
+                    <Image className='msg-item__user-avatar-img' src={item.headshots} />
+                </View>
+                <View className='msg-item__desc'>
+                    <View className='msg-item__user-info'>
+                        <View className='msg-item__user-name'>
+                            {item.nickname}
+                        </View>
+                        <View className='msg-item__msg-time'>
+                            {item.time}
+                        </View>
+                    </View>
+                    <View className='msg-item__msg-text'>{item.context}</View>
+                </View>
+            </View>
+        )
+    });
+};
+
+
 
   render() {
     return (
-      <View>
-       
-        <ScrollView>
-          
+      <View className='page msg'>
+
+        <View className='msg-list'>
+          {this.renderList()}
+        </View>
 
 
-          {/* <!-- =============评论部分开始============= --> */}
-          <view className="cu-bar bg-white align-center margin-top">
-            <view className="action border-title">
-              <text className="text-lg text-bold text-blue">精选留言</text>
-              <text className="bg-gradual-blue"></text>
-            </view>
-          </view>
 
 
-  
-
-          <view className="margin-bottom me-bgcolor">
-            <view className="margin-sm flex flex-wrap align-center" >
-              <Block >
-                <view className="basis-xs">
-                  <view className="cu-avatar lg round margin-left-sm" ></view>
-                </view>
-                <view className="grid col-1 basis-xl" style={{minHeight:'120rpx'}}>
-                  <view className="padding-xs">
-                    <text className="text-black text-bold">xxx</text>
-                    <view className="fr text-xs" style={{lineHeight: "32rpx"}}>
-                      <text className="text-grey">123</text>
-                    </view>
-                  </view>
-                  <view className="padding-sm">
-                    <text className="text-sm">123123</text>
-        
-                  </view>
-                </view>
-
-          
-                <view className="bd-hr"></view>
-              </Block>
-              <Block >
-                <view className="basis-xs">
-                  <view className="cu-avatar lg round margin-left-sm" ></view>
-                </view>
-                <view className="grid col-1 basis-xl" style={{minHeight:'120rpx'}}>
-                  <view className="padding-xs">
-                    <text className="text-black text-bold">QUEAHREN </text>
-                    <view className="fr text-xs" style={{lineHeight: "32rpx"}}>
-                      <text className="text-grey">2021.10.1</text>
-                    </view>
-                  </view>
-                  <view className="padding-sm">
-                    <text className="text-sm">可垃圾啊是到付哈克斯的立法和洛克</text>
-        
-                  </view>
-                </view>
-
-          
-                <view className="bd-hr"></view>
-              </Block>
-              <Block >
-                <view className="basis-xs">
-                  <view className="cu-avatar lg round margin-left-sm" ></view>
-                </view>
-                <view className="grid col-1 basis-xl" style={{minHeight:'120rpx'}}>
-                  <view className="padding-xs">
-                    <text className="text-black text-bold">xxx</text>
-                    <view className="fr text-xs" style={{lineHeight: "32rpx"}}>
-                      <text className="text-grey">123</text>
-                    </view>
-                  </view>
-                  <view className="padding-sm">
-                    <text className="text-sm">123123</text>
-        
-                  </view>
-                </view>
-
-          
-                <view className="bd-hr"></view>
-              </Block>
-              <Block >
-                <view className="basis-xs">
-                  <view className="cu-avatar lg round margin-left-sm" ></view>
-                </view>
-                <view className="grid col-1 basis-xl" style={{minHeight:'120rpx'}}>
-                  <view className="padding-xs">
-                    <text className="text-black text-bold">xxx</text>
-                    <view className="fr text-xs" style={{lineHeight: "32rpx"}}>
-                      <text className="text-grey">123</text>
-                    </view>
-                  </view>
-                  <view className="padding-sm">
-                    <text className="text-sm">123123</text>
-        
-                  </view>
-                </view>
-
-          
-                <view className="bd-hr"></view>
-              </Block>
-              <Block >
-                <view className="basis-xs">
-                  <view className="cu-avatar lg round margin-left-sm" ></view>
-                </view>
-                <view className="grid col-1 basis-xl" style={{minHeight:'120rpx'}}>
-                  <view className="padding-xs">
-                    <text className="text-black text-bold">xxx</text>
-                    <view className="fr text-xs" style={{lineHeight: "32rpx"}}>
-                      <text className="text-grey">123</text>
-                    </view>
-                  </view>
-                  <view className="padding-sm">
-                    <text className="text-sm">123123</text>
-        
-                  </view>
-                </view>
-
-          
-                <view className="bd-hr"></view>
-              </Block>
-             
-            </view>
-          </view>
-          <view style={{height:"50px"}}></view>
-          </ScrollView>
-        <ClFloatButton className="Scancode"
-          size='large'
-          bgColor='red'
-          closeWithShadow
-          direction='vertical'
-          move
-          onActionClick={this.handleClick}
-          actionList={[
-            {
-              icon: 'lightforbid'
-            },
-            {
-              icon: 'friendfamous'
-            }
-          ]}
-        />
       </View>
     )
   }
