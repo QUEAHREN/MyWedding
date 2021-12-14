@@ -3,7 +3,7 @@ import { View, Image, Button, Text } from '@tarojs/components'
 import Taro, { Current } from '@tarojs/taro';
 import './messages.scss'
 import { ClFloatButton } from "mp-colorui";
-import { getWeddingID, getUserInfo } from '../../model/opStorage'
+import { getWeddingID, getUserInfo, checkWedding } from '../../model/opStorage'
 import { AtFloatLayout, AtPagination, AtForm, AtInput, AtTextarea, AtMessage, AtButton, AtInputNumber } from "taro-ui"
 import { isEmpty } from 'lodash';
 
@@ -91,14 +91,7 @@ export default class Messages extends Component<any, isState> {
       note: ''
     })
 
-    if (isEmpty(getWeddingID())) {
-      setTimeout(function () {
-        Taro.switchTab({
-          url: '/pages/usercenter/usercenter'
-        })
-      }, 3000)
-    }
-
+    checkWedding();
     _this.onLoadMsg(1);
 
   }

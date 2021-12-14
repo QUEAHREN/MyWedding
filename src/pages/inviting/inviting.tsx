@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import { View, Image,Text } from '@tarojs/components'
 import Taro from '@tarojs/taro';
-import { getWeddingID } from '../../model/opStorage';
+import { checkWedding, getWeddingID } from '../../model/opStorage';
 import { isEmpty } from 'lodash';
 
 interface isState {
@@ -28,14 +28,7 @@ export default class Inviting extends Component<any, isState> {
       invitationUrl: ''
       })
 
-      if (isEmpty(getWeddingID())) {
-        setTimeout(function () {
-          Taro.switchTab({
-            url: '/pages/usercenter/usercenter'
-          })
-        }, 3000)
-      }
-
+      checkWedding();
     Taro.request({
       url: 'http://127.0.0.1:5000/invitations',
       method: 'GET',

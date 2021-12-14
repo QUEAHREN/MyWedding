@@ -5,7 +5,7 @@ import callHe from '../../assets/img/icon-call-he.png';
 import callShe from '../../assets/img/icon-call-she.png';
 import './navigation.scss'
 import '../../model/opStorage'
-import { getWeddingID } from '../../model/opStorage';
+import { checkWedding, getWeddingID } from '../../model/opStorage';
 import { isEmpty } from 'lodash';
 
 interface isState {
@@ -37,13 +37,7 @@ export default class Navigation extends Component<any, isState> {
       content: "天安门"
     })
 
-    if (isEmpty(getWeddingID())) {
-      setTimeout(function () {
-        Taro.switchTab({
-          url: '/pages/usercenter/usercenter'
-        })
-      }, 3000)
-    }
+    checkWedding();
 
     Taro.request({
       url: 'http://127.0.0.1:5000/navigation',

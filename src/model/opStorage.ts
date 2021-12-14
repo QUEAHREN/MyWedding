@@ -68,6 +68,23 @@ export const getUserInfo = () => {
     }
 }
 
+export const checkWedding=()=>{
+
+    if (isEmpty(getWeddingID())) {
+        Taro.atMessage({
+          'message': '当前没有加入婚礼，正在跳转...',
+          'type': 'warning',
+        })
+  
+        setTimeout(function () {
+          Taro.switchTab({
+            url: '/pages/usercenter/usercenter'
+          })
+        }, 3000)
+      }
+  
+}
+
 // // 用户登出，删除cookie
 // export const logout = (props) => {
 //     console.log(props)
