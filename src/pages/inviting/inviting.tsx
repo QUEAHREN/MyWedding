@@ -1,9 +1,9 @@
-import { Component } from 'react'
+import React, { Component } from 'react'
 import { View, Image,Text } from '@tarojs/components'
 import Taro from '@tarojs/taro';
 import { checkWedding, getWeddingID } from '../../model/opStorage';
 import { isEmpty } from 'lodash';
-
+import {  AtMessage } from "taro-ui"
 interface isState {
   weddingID: string,
   invitationUrl: string
@@ -29,6 +29,7 @@ export default class Inviting extends Component<any, isState> {
       })
 
       checkWedding();
+
     Taro.request({
       url: 'http://127.0.0.1:5000/invitations',
       method: 'GET',
@@ -73,6 +74,7 @@ export default class Inviting extends Component<any, isState> {
         {/* {isEmpty(getWeddingID()) &&
           <Text>请前往“我的”设置邀请码</Text>
         } */}
+        <AtMessage />
       </View>
 
     )

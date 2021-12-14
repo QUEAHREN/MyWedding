@@ -13,7 +13,7 @@ interface isState {
   avatarUrl: string
   nickName: string
   openAF: boolean
-  weddingID: string
+  weddingID: any
   content: string
 }
 
@@ -23,7 +23,7 @@ export default class Usercenter extends Component<any, isState> {
     super(...arguments)
     this.state = {
       avatarUrl: '',
-      nickName: '暂未登录',
+      nickName: '单击以登录',
       openAF: false,
       weddingID: getWeddingID(),
       content: '加入婚礼',
@@ -35,7 +35,7 @@ export default class Usercenter extends Component<any, isState> {
     const _this = this
     _this.setState({
       avatarUrl: '',
-      nickName: '暂未登录',
+      nickName: '单击以登录',
       openAF: false,
       weddingID: getWeddingID(),
       content: '加入婚礼',
@@ -72,7 +72,7 @@ export default class Usercenter extends Component<any, isState> {
     this.setState({
       weddingID: value,
     })
-    //console.log(this.state.weddingID)
+    console.log(this.state.weddingID)
     return value
   }
 
@@ -155,15 +155,13 @@ export default class Usercenter extends Component<any, isState> {
               placeholder='请输入数字'
               value={this.state.weddingID}
               onChange={this.handleInputChange}
-              style={{
-                width: '100%',
-                height: '100px'
-              }}
+              
             />
             <Text>{"\n"}</Text><Text>{"\n"}</Text><Text>{"\n"}</Text><Text>{"\n"}</Text>
           </AtForm>
           <Button onClick={this.handleSetWeddingID}>提交</Button>   
         </AtFloatLayout>
+        
         <AtMessage />
       </View >
     )
