@@ -4,7 +4,7 @@ import Taro, { Current } from '@tarojs/taro';
 import './messages.scss'
 import { ClFloatButton } from "mp-colorui";
 import { getWeddingID, getUserInfo } from '../../model/opStorage'
-import { AtFloatLayout, AtPagination, AtForm, AtInput, AtTextarea, AtMessage, AtButton } from "taro-ui"
+import { AtFloatLayout, AtPagination, AtForm, AtInput, AtTextarea, AtMessage, AtButton, AtInputNumber } from "taro-ui"
 import { isEmpty } from 'lodash';
 
 
@@ -18,7 +18,10 @@ interface isState {
   newMessage: any,
   nickName: string,
   avatarUrl: string,
-  attendence: any
+  attendance: any,
+  phoneNumber: any,
+  realName: any,
+  note: any
 }
 
 export default class Messages extends Component<any, isState> {
@@ -35,6 +38,10 @@ export default class Messages extends Component<any, isState> {
       newMessage: '',
       nickName: '',
       avatarUrl: '',
+      attendance: '',
+      phoneNumber: '',
+      realName: '',
+      note: ''
     }
   }
 
@@ -78,6 +85,10 @@ export default class Messages extends Component<any, isState> {
       newMessage: '',
       nickName: '',
       avatarUrl: '',
+      attendance: '',
+      phoneNumber: '',
+      realName: '',
+      note: ''
     })
 
     if (isEmpty(getWeddingID())) {
@@ -89,12 +100,6 @@ export default class Messages extends Component<any, isState> {
     }
 
     _this.onLoadMsg(1);
-
-    let userInfo = getUserInfo();
-    _this.setState({
-      avatarUrl: userInfo.avatarUrl,
-      nickName: userInfo.nickName
-    })
 
   }
 
@@ -120,7 +125,6 @@ export default class Messages extends Component<any, isState> {
       if (item.msgNumber)
         return (
           <View className='msg-item' key={Math.random() * Math.random()}>
-
           </View>
         )
       else
@@ -151,11 +155,6 @@ export default class Messages extends Component<any, isState> {
       addMsg: false,
       attendWedding: false
     })
-
-  }
-
-  handleInputChange() {
-
   }
 
   handleNewMsgChange = (value) => {
@@ -163,7 +162,6 @@ export default class Messages extends Component<any, isState> {
       newMessage: value
     })
   }
-
 
   handleSubmitNewMsg = () => {
 
@@ -206,14 +204,13 @@ export default class Messages extends Component<any, isState> {
     })
 
   }
-  handlePageChange = (value) => {
 
-    console.log(value.current)
+  handlePageChange = (value) => {
+    // console.log(value.current)
     this.setState({
       current: value.current
     })
     this.onLoadMsg(value.current)
-
   }
 
   handleUserinfoClick = () => {
@@ -225,14 +222,54 @@ export default class Messages extends Component<any, isState> {
     })
   }
 
-  onSubmit (event) {
-    
+  handleAttendSubmit = (event) => {
+    const _this = this
+    Taro.request({
+      url: 'http://127.0.0.1:5000/participants',
+      method: 'POST',
+      data: {
+        'wedding_id': _this.state.weddingID,
+        'realName': _this.state.realName,
+        'phoneNumber': _this.state.phoneNumber,
+        'attendance': _this.state.attendance,
+        'note': _this.state.note
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      success: function (res) {
+
+        Taro.atMessage({
+          'message': '成功提交信息！',
+          'type': 'success',
+        })
+        setTimeout(function () {
+          _this.setState({
+            attendWedding: false,
+            attendance: '',
+            phoneNumber: '',
+            realName: '',
+            note: ''
+          })
+        }, 2000)
+      },
+      fail: () => {
+        Taro.atMessage({
+          'message': '提交失败',
+          'type': 'error',
+        })
+      }
+
+    })
+  }
+  onSubmit(event) {
+    console.log(this.state.value)
   }
 
   render() {
     return (
       <View>
-        <Button openType="getUserInfo" />
+        {/* 分页器 */}
         <AtPagination
           icon
           total={this.state.total}
@@ -242,13 +279,14 @@ export default class Messages extends Component<any, isState> {
         >
         </AtPagination>
 
+        {/* 渲染列表 */}
         <View className='page msg'>
           <View className='msg-list'>
             {this.renderList()}
           </View>
         </View>
 
-
+        {/* 浮动按钮 */}
         <ClFloatButton
           size='large'
           bgColor='blue'
@@ -267,6 +305,7 @@ export default class Messages extends Component<any, isState> {
           onClick={this.handleUserinfoClick}
         />
 
+        {/* 写留言 */}
         <AtFloatLayout isOpened={this.state.addMsg} title="留下你的祝福吧！" onClose={this.handleAFClose}>
 
           <Text>{"\n"}</Text>
@@ -282,24 +321,63 @@ export default class Messages extends Component<any, isState> {
 
         </AtFloatLayout>
 
+        {/* 参会 */}
         <AtFloatLayout isOpened={this.state.attendWedding} title="参加婚礼——填写与会人员信息" onClose={this.handleAFClose}>
-          <AtForm
-            onSubmit={this.onSubmit.bind(this)}
-          >
-            <AtInput
-              name='value'
-              title='文本'
-              type='number'
-              placeholder='单行文本'
-              value={this.state.attendence}
-              onChange={(value) => {
-                  this.setState({
-                    attendence: value
-                  })}}
-            />
-            <AtButton formType='submit'>提交</AtButton>
 
-          </AtForm>
+          <AtInput
+            name='value1'
+            title='真实姓名:'
+            type='text'
+            placeholder=''
+            value={this.state.realName}
+            onChange={(value) => {
+              this.setState({
+                realName: value
+              })
+            }}
+          />
+          <AtInput
+            name='value2'
+            title='手机号码:'
+            type='phone'
+            placeholder=''
+            value={this.state.phoneNumber}
+            onChange={(value) => {
+              this.setState({
+                phoneNumber: value
+              })
+            }}
+          />
+
+          <AtInput
+            name='value3'
+            title='参会人数:'
+            type='number'
+            placeholder=''
+            value={this.state.attendance}
+            maxlength={2}
+            onChange={(value) => {
+              this.setState({
+                attendance: value
+              })
+            }}
+          />
+
+          <AtInput
+            name='value4'
+            title='备注:'
+            type='text'
+            placeholder=''
+            value={this.state.note}
+            onChange={(value) => {
+              this.setState({
+                note: value
+              })
+            }}
+          />
+          <AtButton onClick={this.handleAttendSubmit} >提交</AtButton>
+          <Text>{"\n"}</Text>
+
 
         </AtFloatLayout>
         <AtMessage />

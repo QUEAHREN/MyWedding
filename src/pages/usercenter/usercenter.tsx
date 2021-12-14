@@ -63,15 +63,16 @@ export default class Usercenter extends Component<any, isState> {
 
   handleAFClose = () => {
     this.setState({
-      openAF: false
+      openAF: false,
+      weddingID:''
     })
   }
 
-  handleInputChange(value) {
+  handleInputChange=(value)=> {
     this.setState({
       weddingID: value,
     })
-    console.log(this.state.weddingID)
+    //console.log(this.state.weddingID)
     return value
   }
 
@@ -118,10 +119,13 @@ export default class Usercenter extends Component<any, isState> {
   handleUserinfoClick=()=>{
     const _this=this
     let userInfo = getUserInfo();
-    _this.setState({
+    
+    setTimeout(function () {
+      _this.setState({
       avatarUrl: userInfo.avatarUrl,
       nickName: userInfo.nickName
     })
+    }, 2000)
   }
 
   render() {
@@ -132,7 +136,7 @@ export default class Usercenter extends Component<any, isState> {
             <View className='msg-item__user-avatar'>
               <Image className='msg-item__user-avatar-img' src={this.state.avatarUrl} />
             </View>
-              <View className='msg-item__user-name'>
+              <View onClick={this.handleUserinfoClick} className='msg-item__user-name'>
               {this.state.nickName}
               </View>
                 
@@ -150,7 +154,7 @@ export default class Usercenter extends Component<any, isState> {
               type='number'
               placeholder='请输入数字'
               value={this.state.weddingID}
-              onChange={this.handleInputChange.bind(this)}
+              onChange={this.handleInputChange}
               style={{
                 width: '100%',
                 height: '100px'
