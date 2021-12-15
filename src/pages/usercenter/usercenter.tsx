@@ -122,12 +122,13 @@ export default class Usercenter extends Component<any, isState> {
 
         </View>
 
-
         <Button onClick={() => {
           this.setState({
             openAF: true
           })
         }}>{this.state.content}</Button>
+
+        <Button >创建婚礼</Button>
 
         <AtFloatLayout isOpened={this.state.openAF} title="请输入婚礼邀请码"
           onClose={() => {
