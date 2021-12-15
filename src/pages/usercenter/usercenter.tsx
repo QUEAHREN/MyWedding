@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { View, Text,Image, Button, Input } from '@tarojs/components'
+import { View, Text, Image, Button, Input } from '@tarojs/components'
 import { AtAvatar } from 'taro-ui'
 import "taro-ui/dist/style/components/avatar.scss";
 import Taro, { UserInfo } from '@tarojs/taro';
@@ -55,27 +55,6 @@ export default class Usercenter extends Component<any, isState> {
 
   }
 
-  handleBTClick = () => {
-    this.setState({
-      openAF: true
-    })
-  }
-
-  handleAFClose = () => {
-    this.setState({
-      openAF: false,
-      weddingID:''
-    })
-  }
-
-  handleInputChange=(value)=> {
-    this.setState({
-      weddingID: value,
-    })
-    console.log(this.state.weddingID)
-    return value
-  }
-
   handleSetWeddingID = () => {
 
     const _this = this
@@ -101,10 +80,11 @@ export default class Usercenter extends Component<any, isState> {
               openAF: false,
               content: '修改当前加入的婚礼:' + getWeddingID()
             })
-          }, 2000)
+          }, 1000)
         }
 
         else {
+          console.log('fail')
           Taro.atMessage({
             'message': '不存在此邀请码，请确认后输入！',
             'type': 'error',
@@ -116,52 +96,65 @@ export default class Usercenter extends Component<any, isState> {
     })
   }
 
-  handleUserinfoClick=()=>{
-    const _this=this
+  handleUserinfoClick = () => {
+    const _this = this
     let userInfo = getUserInfo();
-    
+
     setTimeout(function () {
       _this.setState({
-      avatarUrl: userInfo.avatarUrl,
-      nickName: userInfo.nickName
-    })
+        avatarUrl: userInfo.avatarUrl,
+        nickName: userInfo.nickName
+      })
     }, 2000)
   }
 
   render() {
     return (
       <View>
-        
+
         <View className='msg-item' key={Math.random() * Math.random()}>
-            <View className='msg-item__user-avatar'>
-              <Image className='msg-item__user-avatar-img' src={this.state.avatarUrl} />
-            </View>
-              <View onClick={this.handleUserinfoClick} className='msg-item__user-name'>
-              {this.state.nickName}
-              </View>
-                
+          <View className='msg-item__user-avatar'>
+            <Image className='msg-item__user-avatar-img' src={this.state.avatarUrl} />
           </View>
-        
-        
-        <Button onClick={this.handleBTClick}>{this.state.content}</Button>
-        
-        <AtFloatLayout isOpened={this.state.openAF} title="请输入婚礼邀请码" onClose={this.handleAFClose}>
-          <AtForm>
-            <Text>{"\n"}</Text>
-            <AtInput
-              name='value2'
-              title='婚礼邀请码:'
-              type='number'
-              placeholder='请输入数字'
-              value={this.state.weddingID}
-              onChange={this.handleInputChange}
-              
-            />
-            <Text>{"\n"}</Text><Text>{"\n"}</Text><Text>{"\n"}</Text><Text>{"\n"}</Text>
-          </AtForm>
-          <Button onClick={this.handleSetWeddingID}>提交</Button>   
+          <View onClick={this.handleUserinfoClick} className='msg-item__user-name'>
+            {this.state.nickName}
+          </View>
+
+        </View>
+
+
+        <Button onClick={() => {
+          this.setState({
+            openAF: true
+          })
+        }}>{this.state.content}</Button>
+
+        <AtFloatLayout isOpened={this.state.openAF} title="请输入婚礼邀请码"
+          onClose={() => {
+            this.setState({
+              openAF: false,
+              weddingID: ''
+            })
+          }}>
+
+          <Text>{"\n"}</Text>
+          <Input
+            // title='婚礼邀请码:'
+            type='number'
+            maxlength={6}
+            placeholder='请输入六位婚礼识别码'
+            onInput={(e) => {
+              this.setState({
+                weddingID: e.detail.value,
+              })
+              console.log(e.detail.value)
+            }}
+          />
+          <Text>{"\n"}</Text>
+
+          <Button onClick={this.handleSetWeddingID}>提交</Button>
         </AtFloatLayout>
-        
+
         <AtMessage />
       </View >
     )

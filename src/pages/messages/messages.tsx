@@ -4,8 +4,7 @@ import Taro, { Current } from '@tarojs/taro';
 import './messages.scss'
 import { ClFloatButton } from "mp-colorui";
 import { getWeddingID, getUserInfo, checkWedding } from '../../model/opStorage'
-import { AtFloatLayout, AtPagination, AtForm, AtInput, AtTextarea, AtMessage, AtButton, AtInputNumber } from "taro-ui"
-import { isEmpty } from 'lodash';
+import { AtFloatLayout, AtPagination, AtInput, AtTextarea, AtMessage, AtButton } from "taro-ui"
 
 
 interface isState {
@@ -54,7 +53,7 @@ export default class Messages extends Component<any, isState> {
       url: 'http://127.0.0.1:5000/msgs',
       method: 'GET',
       data: {
-        'wedding_id': _this.state.weddingID,
+        'wedding_id': getWeddingID(),
         'page': newcurrent
       },
       header: {
@@ -150,11 +149,6 @@ export default class Messages extends Component<any, isState> {
     })
   }
 
-  handleNewMsgChange = (value) => {
-    this.setState({
-      newMessage: value
-    })
-  }
 
   handleSubmitNewMsg = () => {
 
@@ -185,7 +179,7 @@ export default class Messages extends Component<any, isState> {
             newMessage: '',
             current: 1
           })
-        }, 2000)
+        }, 1000)
       },
       fail: () => {
         Taro.atMessage({
@@ -255,9 +249,6 @@ export default class Messages extends Component<any, isState> {
 
     })
   }
-  onSubmit(event) {
-    console.log(this.state.value)
-  }
 
   render() {
     return (
@@ -299,24 +290,30 @@ export default class Messages extends Component<any, isState> {
         />
 
         {/* 写留言 */}
-        <AtFloatLayout isOpened={this.state.addMsg} title="留下你的祝福吧！" onClose={this.handleAFClose}>
-
+        <AtFloatLayout isOpened={this.state.addMsg}
+          title="留下你的祝福吧！"
+          >
           <Text>{"\n"}</Text>
           <AtTextarea
             value={this.state.newMessage}
-            onChange={this.handleNewMsgChange}
+            onChange={(value) => {
+              this.setState({
+                newMessage: value
+              })
+            }}
             maxLength={50}
             placeholder='想说些什么...'
           />
-          <Text>{"\n"}</Text><Text>{"\n"}</Text><Text>{"\n"}</Text>
+          <Text>{"\n"}</Text>
 
           <Button onClick={this.handleSubmitNewMsg}>提交</Button>
 
         </AtFloatLayout>
 
         {/* 参会 */}
-        <AtFloatLayout isOpened={this.state.attendWedding} title="参加婚礼——填写与会人员信息" onClose={this.handleAFClose}>
-
+        <AtFloatLayout isOpened={this.state.attendWedding}
+          title="参加婚礼——填写与会人员信息"
+          onClose={this.handleAFClose}>
           <AtInput
             name='value1'
             title='真实姓名:'
@@ -341,21 +338,19 @@ export default class Messages extends Component<any, isState> {
               })
             }}
           />
-
           <AtInput
             name='value3'
             title='参会人数:'
             type='number'
             placeholder=''
             value={this.state.attendance}
-            maxlength={2}
+            maxLength={2}
             onChange={(value) => {
               this.setState({
                 attendance: value
               })
             }}
           />
-
           <AtInput
             name='value4'
             title='备注:'

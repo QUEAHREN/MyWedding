@@ -40,5 +40,25 @@ export default {
       text: "我的"
     }
     ]
-  }
+  },
+
+
+  // subPackages:[
+  //   {
+  //     "root": "pages/inviting/",
+  //     "pages": [
+  //       "inviting",
+  //     ]
+  //   }, {
+  //     "root": "pages/navigation/",
+  //     "pages": [
+  //       "navigation",
+  //     ]
+  //   }, {
+  //     "root": "pages/messages/",
+  //     "pages": [
+  //       "messages",
+  //     ]
+  //   }
+  // ]
 }
