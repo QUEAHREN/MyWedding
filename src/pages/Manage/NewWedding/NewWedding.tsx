@@ -22,7 +22,9 @@ export default class NewWedding extends Component<any, isState> {
     constructor() {
         super(...arguments)
         this.state = {
-            files: []
+            files: [],
+            
+
         }
     }
 
@@ -39,7 +41,7 @@ export default class NewWedding extends Component<any, isState> {
 
 
     uploadInviting=()=>{
-        console.log(this.state.files[0].url)
+
         cos.postObject({
             Bucket: 'xusy-1300242514',
             Region: 'ap-nanjing',
