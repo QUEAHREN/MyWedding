@@ -43,22 +43,12 @@ export default {
   },
 
 
-  // subPackages:[
-  //   {
-  //     "root": "pages/inviting/",
-  //     "pages": [
-  //       "inviting",
-  //     ]
-  //   }, {
-  //     "root": "pages/navigation/",
-  //     "pages": [
-  //       "navigation",
-  //     ]
-  //   }, {
-  //     "root": "pages/messages/",
-  //     "pages": [
-  //       "messages",
-  //     ]
-  //   }
-  // ]
+  subPackages:[
+    {
+      "root": "pages/Manage/",
+      "pages": [
+        "NewWedding/NewWedding",
+      ]
+    }
+  ]
 }
