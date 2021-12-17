@@ -59,7 +59,13 @@ const config = {
         }
       }
     }
-  }
+  },
+  
+  defineConstants: {
+      LOCATION_APIKEY: JSON.stringify('KQ6BZ-M4JEQ-VOF5K-GKJ4Q-UTWEO-E2B3E')
+  },
+    
+  
 }
 
 module.exports = function (merge) {

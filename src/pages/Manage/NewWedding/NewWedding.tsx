@@ -10,6 +10,12 @@ import { random } from 'lodash'
 interface isState {
     files: any
     invitingUrl: string
+    latitude: any
+    longitude: any
+    name:string
+    address: string
+    content: string
+    
 }
 
 //临时处理方式
@@ -25,7 +31,12 @@ export default class NewWedding extends Component<any, isState> {
         super(...arguments)
         this.state = {
             files: [],
-            invitingUrl: ''
+            invitingUrl: '',
+            latitude: 39.90960456049752,
+            longitude: 116.3972282409668,
+            address:'',
+            name:'',
+            content: "天安门"
 
         }
     }
@@ -72,6 +83,25 @@ export default class NewWedding extends Component<any, isState> {
 
     }
 
+    chooseLocation=()=>{
+
+        const _this = this
+        Taro.chooseLocation({
+            success: function (res) {
+                _this.setState({
+                    address:res.address,
+                    name:res.name,
+                    longitude:res.longitude,
+                    latitude:res.latitude
+                    
+                })
+                console.log(_this.state)
+            }
+        })
+
+        
+
+    }
     render() {
         return (
             <view className="container">
@@ -84,7 +114,7 @@ export default class NewWedding extends Component<any, isState> {
                         onChange={this.onChange.bind(this)}
                     />
                     <Button onClick={this.uploadInviting}>上传图片</Button>
-
+                    <Button onClick={this.chooseLocation}>选择位置</Button>
 
                     <form catchreset="formReset">
                         <view className="page-section page-section-gap">
