@@ -5,9 +5,11 @@ import './NewWedding.scss'
 import { AtMessage } from "taro-ui"
 import { AtImagePicker } from 'taro-ui'
 import COS from 'cos-wx-sdk-v5'
+import { random } from 'lodash'
 
 interface isState {
     files: any
+    invitingUrl: string
 }
 
 //临时处理方式
@@ -23,7 +25,7 @@ export default class NewWedding extends Component<any, isState> {
         super(...arguments)
         this.state = {
             files: [],
-            
+            invitingUrl: ''
 
         }
     }
@@ -40,19 +42,32 @@ export default class NewWedding extends Component<any, isState> {
     }
 
 
-    uploadInviting=()=>{
+    uploadInviting = () => {
 
+        //命名方式
+        const _this = this
+        var url = _this.state.files[0].url
+        var timestamp = new Date().getTime();
+        var filekey = timestamp + url.substring(url.length - 15);
+        console.log(filekey)
         cos.postObject({
             Bucket: 'xusy-1300242514',
             Region: 'ap-nanjing',
-            Key: 'WeddingInviting/' + 'testimg',
-            FilePath: this.state.files[0].url,
+            Key: 'WeddingInviting/' + filekey,
+            FilePath: _this.state.files[0].url,
             onProgress: function (info) {
                 console.log(JSON.stringify(info));
             }
         }, function (err, data) {
-            console.log("?")
-            console.log(err || data);
+
+            if (err) {
+                console.log(err);
+            }
+            else {
+                _this.setState({
+                    invitingUrl: data.Location
+                })
+            }
         });
 
     }
@@ -63,7 +78,7 @@ export default class NewWedding extends Component<any, isState> {
                 <view className="page-body">
 
                     <AtImagePicker
-                    
+                        count={1}
                         length={1}
                         files={this.state.files}
                         onChange={this.onChange.bind(this)}
