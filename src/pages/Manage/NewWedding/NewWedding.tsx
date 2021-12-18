@@ -1,11 +1,11 @@
 import { Component } from 'react'
-import { Button, Text, Image, View, Map } from '@tarojs/components'
+import { Button, Input, Image, View } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import './NewWedding.scss'
 import { AtMessage } from "taro-ui"
 import { AtImagePicker } from 'taro-ui'
 import COS from 'cos-wx-sdk-v5'
-import { random } from 'lodash'
+import { isEmpty, random } from 'lodash'
 
 interface isState {
     files: any
@@ -92,20 +92,39 @@ export default class NewWedding extends Component<any, isState> {
                     address:res.address,
                     name:res.name,
                     longitude:res.longitude,
-                    latitude:res.latitude
-                    
+                    latitude:res.latitude,
+                    content:res.name
                 })
                 console.log(_this.state)
             }
         })
 
-        
+    }
+
+    handleCreateWedding=()=>{
+
+        const _this = this
+        if (isEmpty(_this.state.files)){
+            Taro.atMessage({
+                'message': '请上传邀请函图片',
+                'type': 'error',
+              })
+            
+        }
+        if (_this.state.content === '天安门'){
+            Taro.atMessage({
+                'message': '请选择宴会位置',
+                'type': 'error',
+              })
+        }
+
 
     }
+
     render() {
         return (
-            <view className="container">
-                <view className="page-body">
+            <View className="container">
+                <View className="page-body">
 
                     <AtImagePicker
                         count={1}
@@ -117,35 +136,28 @@ export default class NewWedding extends Component<any, isState> {
                     <Button onClick={this.chooseLocation}>选择位置</Button>
 
                     <form catchreset="formReset">
-                        <view className="page-section page-section-gap">
-                            <view className="page-section-title">switch</view>
-                            <switch name="switch" />
-                        </view>
+    
 
 
+                        <View className="page-section">
+                            <View className="page-section-title">input</View>
+                            <View className="weui-cells weui-cells_after-title">
+                                <View className="weui-cell weui-cell_input">
+                                    <View className="weui-cell__bd" style="margin: 30rpx 0" >
+                                        <Input className="weui-input" name="input" placeholder="这是一个输入框" />
+                                    </View>
+                                </View>
+                            </View>
+                        </View>
 
-
-
-
-                        <view className="page-section">
-                            <view className="page-section-title">input</view>
-                            <view className="weui-cells weui-cells_after-title">
-                                <view className="weui-cell weui-cell_input">
-                                    <view className="weui-cell__bd" style="margin: 30rpx 0" >
-                                        <input className="weui-input" name="input" placeholder="这是一个输入框" />
-                                    </view>
-                                </view>
-                            </view>
-                        </view>
-
-                        <view className="btn-area">
-                            <button style="margin: 30rpx 0" type="primary" formType="submit">Submit</button>
+                        <View className="btn-area">
+                            <button onClick={this.handleCreateWedding}>Submit</button>
                             <button style="margin: 30rpx 0" formType="reset">Reset</button>
-                        </view>
+                        </View>
                     </form>
-                </view>
-
-            </view>
+                </View>
+                <AtMessage/>
+            </View>
         )
     }
 }
