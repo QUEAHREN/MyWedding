@@ -98,8 +98,8 @@ export default class Usercenter extends Component<any, isState> {
 
   handleUserinfoClick = () => {
     const _this = this
-    let userInfo = getUserInfo();
-
+    let userInfo = getUserInfo()
+    console.log(userInfo)
     setTimeout(function () {
       _this.setState({
         avatarUrl: userInfo.avatarUrl,
@@ -128,10 +128,17 @@ export default class Usercenter extends Component<any, isState> {
           })
         }}>{this.state.content}</Button>
 
-        <Button onClick={()=>{
-          Taro.navigateTo({
-            url: '/pages/Manage/NewWedding/NewWedding',
-          })
+        <Button onClick={() => {
+          if (isEmpty(this.state.avatarUrl)) {
+            Taro.atMessage({
+              'message': '请先登录！',
+              'type': 'warning',
+            })
+          }
+          else
+            Taro.navigateTo({
+              url: '/pages/Manage/NewWedding/NewWedding',
+            })
         }}>创建婚礼</Button>
 
         <AtFloatLayout isOpened={this.state.openAF} title="请输入婚礼邀请码"

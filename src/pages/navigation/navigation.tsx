@@ -6,7 +6,7 @@ import callShe from '../../assets/img/icon-call-she.png';
 import './navigation.scss'
 import '../../model/opStorage'
 import { checkWedding, getWeddingID } from '../../model/opStorage';
-import {  AtMessage } from "taro-ui"
+import { AtMessage } from "taro-ui"
 
 interface isState {
   weddingID: string,
@@ -109,7 +109,7 @@ export default class Navigation extends Component<any, isState> {
             </View>
           </View>
         </View>
-        <AtMessage/>
+        <AtMessage />
       </View>
     )
   }

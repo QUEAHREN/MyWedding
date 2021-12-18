@@ -91,6 +91,7 @@ export default class Messages extends Component<any, isState> {
     })
 
     checkWedding();
+    
     _this.onLoadMsg(1);
 
   }

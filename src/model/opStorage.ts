@@ -75,12 +75,12 @@ export const checkWedding=()=>{
           'message': '当前没有加入婚礼，正在跳转...',
           'type': 'warning',
         })
-  
+        console.log("failed to load weddingID")
         setTimeout(function () {
           Taro.switchTab({
             url: '/pages/usercenter/usercenter'
           })
-        }, 3000)
+        }, 1500)
       }
   
 }
