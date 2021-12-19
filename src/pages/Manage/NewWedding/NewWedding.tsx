@@ -38,7 +38,7 @@ export default class NewWedding extends Component<any, isState> {
             longitude: 116.3972282409668,
             address: '',
             name: '',
-            content: "天安门",
+            content: "人民大会堂",
             nickName: getInfo('nickName'),
             weddingID: ''
         }
@@ -81,6 +81,11 @@ export default class NewWedding extends Component<any, isState> {
                 _this.setState({
                     invitingUrl: data.Location
                 })
+                Taro.atMessage({
+                    'message': '成功上传！',
+                    'type': 'success',
+                })
+
             }
         });
 
@@ -107,7 +112,7 @@ export default class NewWedding extends Component<any, isState> {
     handleCreateWedding = () => {
 
         const _this = this
-
+        let success = true
         if (isEmpty(_this.state.files)) {
             Taro.atMessage({
                 'message': '请上传邀请函图片',
@@ -136,6 +141,9 @@ export default class NewWedding extends Component<any, isState> {
                     })
                     setWeddingID(res.data.wedding_id)
                     console.log(res.data)
+                },
+                fail: () => {
+                    success = false
                 }
 
             }).then(() => {
@@ -143,7 +151,7 @@ export default class NewWedding extends Component<any, isState> {
                     url: 'http://127.0.0.1:5000/navigation',
                     method: 'POST',
                     data: {
-                        'wedding_id':  _this.state.weddingID,
+                        'wedding_id': _this.state.weddingID,
                         'latitude': _this.state.latitude,
                         'longitude': _this.state.longitude,
                         'content': _this.state.content
@@ -154,6 +162,9 @@ export default class NewWedding extends Component<any, isState> {
                     success: function (res) {
 
                         console.log(res.data)
+                    },
+                    fail: () => {
+                        success = false
                     }
 
                 })
@@ -162,15 +173,17 @@ export default class NewWedding extends Component<any, isState> {
                     method: 'POST',
                     data: {
                         'wedding_id': _this.state.weddingID,
-                        'invitationUrl':'https://' + _this.state.invitingUrl,
+                        'invitationUrl': 'https://' + _this.state.invitingUrl,
                     },
                     header: {
                         'content-type': 'application/json'
                     },
                     success: function (res) {
                         console.log(res.data)
+                    },
+                    fail: () => {
+                        success = false
                     }
-
                 })
                 Taro.request({
                     url: 'http://127.0.0.1:5000/msgs',
@@ -184,11 +197,22 @@ export default class NewWedding extends Component<any, isState> {
                     },
                     header: {
                         'content-type': 'application/json'
-                    }              
-
+                    },
+                    fail: () => {
+                        success = false
+                    }
                 })
-
             })
+
+            if (success) {
+                Taro.atMessage({
+                    'message': '创建成功！',
+                    'type': 'success',
+                })
+                setTimeout(function () {
+                    Taro.navigateBack()
+                }, 1500)
+            }
 
         }
 
@@ -196,37 +220,34 @@ export default class NewWedding extends Component<any, isState> {
 
     render() {
         return (
-            <View className="container">
-                <View className="page-body">
-
+            <View>
+                <View>
+                    <View>上传婚礼邀请函图片：</View>
                     <AtImagePicker
                         count={1}
-                        length={1}
+                        length={2}
                         files={this.state.files}
                         onChange={this.onChange.bind(this)}
                     />
-                    <Button onClick={this.uploadInviting}>上传图片</Button>
-                    <Button onClick={this.chooseLocation}>选择位置</Button>
+                    <Button onClick={this.uploadInviting}>点击上传</Button>
+                    <Button onClick={this.chooseLocation}>选择席设位置</Button>
+                    <View>导航备注：</View>
+                    <Input
 
-                    <form catchreset="formReset">
+                        type='text'
+                        placeholder={"席设：" + this.state.content}
+                        onInput={(e) => {
+                            this.setState({
+                                content: e.detail.value,
+                            })
+                            console.log(e.detail.value)
+                        }}
+                    />
 
 
+                    <Button onClick={this.handleCreateWedding}>创建</Button>
 
-                        <View className="page-section">
-                            <View className="page-section-title">input</View>
-                            <View className="weui-cells weui-cells_after-title">
-                                <View className="weui-cell weui-cell_input">
-                                    <View className="weui-cell__bd" style="margin: 30rpx 0" >
-                                        <Input placeholder="这是一个输入框" />
-                                    </View>
-                                </View>
-                            </View>
-                        </View>
 
-                        <View className="btn-area">
-                            <button onClick={this.handleCreateWedding}>Submit</button>
-                        </View>
-                    </form>
                 </View>
                 <AtMessage />
             </View>

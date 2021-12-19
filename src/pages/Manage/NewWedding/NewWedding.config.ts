@@ -1,4 +1,4 @@
 export default {
-    navigationBarTitleText: '新增婚礼'
+    navigationBarTitleText: '创建婚礼'
   }
   

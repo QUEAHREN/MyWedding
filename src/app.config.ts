@@ -48,6 +48,7 @@ export default {
       "root": "pages/Manage/",
       "pages": [
         "NewWedding/NewWedding",
+        "Vistors/Vistors"
       ]
     }
   ]
