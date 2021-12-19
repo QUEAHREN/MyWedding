@@ -121,7 +121,7 @@ export default class NewWedding extends Component<any, isState> {
 
         } else if (_this.state.content === '天安门') {
             Taro.atMessage({
-                'message': '请选择宴会位置',
+                'message': '请选择婚礼位置',
                 'type': 'error',
             })
         } else {
@@ -230,12 +230,12 @@ export default class NewWedding extends Component<any, isState> {
                         onChange={this.onChange.bind(this)}
                     />
                     <Button onClick={this.uploadInviting}>点击上传</Button>
-                    <Button onClick={this.chooseLocation}>选择席设位置</Button>
+                    <Button onClick={this.chooseLocation}>选择婚礼位置</Button>
                     <View>导航备注：</View>
                     <Input
 
                         type='text'
-                        placeholder={"席设：" + this.state.content}
+                        placeholder={"婚礼位置：" + this.state.content}
                         onInput={(e) => {
                             this.setState({
                                 content: e.detail.value,

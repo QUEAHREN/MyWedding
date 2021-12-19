@@ -140,6 +140,23 @@ export default class Usercenter extends Component<any, isState> {
               url: '/pages/Manage/NewWedding/NewWedding',
             })
         }}>创建婚礼</Button>
+        <Button onClick={() => {
+          if (isEmpty(this.state.avatarUrl)) {
+            Taro.atMessage({
+              'message': '请先登录！',
+              'type': 'warning',
+            })
+          }else if(isEmpty(this.state.weddingID)){
+            Taro.atMessage({
+              'message': '请先加入您创建的婚礼！',
+              'type': 'warning',
+            })
+          }
+          else
+            Taro.navigateTo({
+              url: '/pages/Manage/Vistors/Vistors',
+            })
+        }}>查询与会名单</Button>
 
         <AtFloatLayout isOpened={this.state.openAF} title="请输入婚礼邀请码"
           onClose={() => {
