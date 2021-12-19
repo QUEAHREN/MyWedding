@@ -108,8 +108,6 @@ export default class NewWedding extends Component<any, isState> {
 
         const _this = this
 
-        _this.uploadInviting()
-
         if (isEmpty(_this.state.files)) {
             Taro.atMessage({
                 'message': '请上传邀请函图片',
@@ -145,9 +143,9 @@ export default class NewWedding extends Component<any, isState> {
                     url: 'http://127.0.0.1:5000/navigation',
                     method: 'POST',
                     data: {
-                        'wedding_id': _this.state.weddingID,
+                        'wedding_id':  _this.state.weddingID,
                         'latitude': _this.state.latitude,
-                        'longitude':_this.state.longitude,
+                        'longitude': _this.state.longitude,
                         'content': _this.state.content
                     },
                     header: {
@@ -164,7 +162,7 @@ export default class NewWedding extends Component<any, isState> {
                     method: 'POST',
                     data: {
                         'wedding_id': _this.state.weddingID,
-                        'invitationUrl': _this.state.invitingUrl,
+                        'invitationUrl':'https://' + _this.state.invitingUrl,
                     },
                     header: {
                         'content-type': 'application/json'
@@ -174,6 +172,22 @@ export default class NewWedding extends Component<any, isState> {
                     }
 
                 })
+                Taro.request({
+                    url: 'http://127.0.0.1:5000/msgs',
+                    method: 'POST',
+                    data: {
+                        'wedding_id': _this.state.weddingID,
+                        'context': '小助手祝百年好合~~',
+                        'time': new Date(),
+                        'nickname': '官方小助手',
+                        'avatarUrl': 'https://bkimg.cdn.bcebos.com/pic/7aec54e736d12f2ec1809b2345c2d562843568ef?x-bce-process=image/watermark,image_d2F0ZXIvYmFpa2UyNzI=,g_7,xp_5,yp_5/format,f_auto'
+                    },
+                    header: {
+                        'content-type': 'application/json'
+                    }              
+
+                })
+
             })
 
         }
