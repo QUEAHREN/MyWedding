@@ -6,16 +6,18 @@ import { AtMessage } from "taro-ui"
 import { AtImagePicker } from 'taro-ui'
 import COS from 'cos-wx-sdk-v5'
 import { isEmpty, random } from 'lodash'
+import { getInfo, getWeddingID, setWeddingID } from '../../../model/opStorage'
 
 interface isState {
     files: any
     invitingUrl: string
     latitude: any
     longitude: any
-    name:string
+    name: string
     address: string
     content: string
-    
+    nickName: any
+    weddingID: any
 }
 
 //临时处理方式
@@ -34,10 +36,11 @@ export default class NewWedding extends Component<any, isState> {
             invitingUrl: '',
             latitude: 39.90960456049752,
             longitude: 116.3972282409668,
-            address:'',
-            name:'',
-            content: "天安门"
-
+            address: '',
+            name: '',
+            content: "天安门",
+            nickName: getInfo('nickName'),
+            weddingID: ''
         }
     }
 
@@ -83,17 +86,17 @@ export default class NewWedding extends Component<any, isState> {
 
     }
 
-    chooseLocation=()=>{
+    chooseLocation = () => {
 
         const _this = this
         Taro.chooseLocation({
             success: function (res) {
                 _this.setState({
-                    address:res.address,
-                    name:res.name,
-                    longitude:res.longitude,
-                    latitude:res.latitude,
-                    content:res.name
+                    address: res.address,
+                    name: res.name,
+                    longitude: res.longitude,
+                    latitude: res.latitude,
+                    content: res.name
                 })
                 console.log(_this.state)
             }
@@ -101,23 +104,79 @@ export default class NewWedding extends Component<any, isState> {
 
     }
 
-    handleCreateWedding=()=>{
+    handleCreateWedding = () => {
 
         const _this = this
-        if (isEmpty(_this.state.files)){
+
+        _this.uploadInviting()
+
+        if (isEmpty(_this.state.files)) {
             Taro.atMessage({
                 'message': '请上传邀请函图片',
                 'type': 'error',
-              })
-            
-        }
-        if (_this.state.content === '天安门'){
+            })
+
+        } else if (_this.state.content === '天安门') {
             Taro.atMessage({
                 'message': '请选择宴会位置',
                 'type': 'error',
-              })
-        }
+            })
+        } else {
 
+            Taro.request({
+                url: 'http://127.0.0.1:5000/weddings',
+                method: 'POST',
+                data: {
+                    'nickname': _this.state.nickName,
+                },
+                header: {
+                    'content-type': 'application/json'
+                },
+                success: function (res) {
+                    _this.setState({
+                        weddingID: res.data.wedding_id,
+                    })
+                    setWeddingID(res.data.wedding_id)
+                    console.log(res.data)
+                }
+
+            }).then(() => {
+                Taro.request({
+                    url: 'http://127.0.0.1:5000/navigation',
+                    method: 'POST',
+                    data: {
+                        'wedding_id': _this.state.weddingID,
+                        'latitude': _this.state.latitude,
+                        'longitude':_this.state.longitude,
+                        'content': _this.state.content
+                    },
+                    header: {
+                        'content-type': 'application/json'
+                    },
+                    success: function (res) {
+
+                        console.log(res.data)
+                    }
+
+                })
+                Taro.request({
+                    url: 'http://127.0.0.1:5000/invitations',
+                    method: 'POST',
+                    data: {
+                        'wedding_id': _this.state.weddingID,
+                        'invitationUrl': _this.state.invitingUrl,
+                    },
+                    header: {
+                        'content-type': 'application/json'
+                    },
+                    success: function (res) {
+                        console.log(res.data)
+                    }
+
+                })
+            })
+
+        }
 
     }
 
@@ -136,7 +195,7 @@ export default class NewWedding extends Component<any, isState> {
                     <Button onClick={this.chooseLocation}>选择位置</Button>
 
                     <form catchreset="formReset">
-    
+
 
 
                         <View className="page-section">
@@ -144,7 +203,7 @@ export default class NewWedding extends Component<any, isState> {
                             <View className="weui-cells weui-cells_after-title">
                                 <View className="weui-cell weui-cell_input">
                                     <View className="weui-cell__bd" style="margin: 30rpx 0" >
-                                        <Input className="weui-input" name="input" placeholder="这是一个输入框" />
+                                        <Input placeholder="这是一个输入框" />
                                     </View>
                                 </View>
                             </View>
@@ -152,11 +211,10 @@ export default class NewWedding extends Component<any, isState> {
 
                         <View className="btn-area">
                             <button onClick={this.handleCreateWedding}>Submit</button>
-                            <button style="margin: 30rpx 0" formType="reset">Reset</button>
                         </View>
                     </form>
                 </View>
-                <AtMessage/>
+                <AtMessage />
             </View>
         )
     }
