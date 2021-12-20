@@ -1,11 +1,12 @@
 import { Component } from 'react'
 import { Button, Input, Image, View } from '@tarojs/components'
 import Taro from '@tarojs/taro'
-import { AtCard } from "taro-ui"
+import { AtCard, AtMessage } from "taro-ui"
 import { getInfo, getWeddingID, setWeddingID } from '../../../model/opStorage'
 
 interface isState {
     particantsList: any
+    status:boolean
 }
 
 
@@ -14,11 +15,12 @@ export default class Vistors extends Component<any, isState> {
     constructor() {
         super(...arguments)
         this.state = {
-            particantsList: []
+            particantsList: [],
+            status:false
         }
     }
 
-    componentDidMount() {
+    componentDidShow() {
 
         const _this = this
 
@@ -33,10 +35,29 @@ export default class Vistors extends Component<any, isState> {
                 'content-type': 'application/json'
             },
             success: function (res) {
-                _this.setState({
-                    particantsList: res.data,
-                })
-                console.log(res.data)
+                
+                if (res.data.status === "fail"){
+                    console.log(res.data)
+                    _this.setState({
+                        status: false,
+                    })
+                    Taro.atMessage({
+                        'message': '您没有查看此婚礼名单的权限',
+                        'type': 'error',
+                    })
+                    setTimeout(function () {
+                        Taro.navigateBack()
+                        
+                    }, 1500)
+
+                }    
+                else{
+                    _this.setState({
+                        particantsList: res.data,
+                        status: true,
+                    })
+                    console.log(res.data)
+                } 
             }
         })
 
@@ -72,7 +93,9 @@ export default class Vistors extends Component<any, isState> {
     render() {
         return (
             <View>
-                {this.renderList()}
+                <AtMessage/>
+                {console.log(this.state.status)}
+                {this.state.status && this.renderList()}   
             </View>
         )
     }
