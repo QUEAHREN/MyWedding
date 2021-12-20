@@ -60,6 +60,7 @@ export default class Messages extends Component<any, isState> {
         'content-type': 'application/json'
       },
       success: function (res) {
+
         _this.setState({
           msgList: res.data,
           total: res.data[res.data.length - 1].msgNumber
@@ -90,9 +91,7 @@ export default class Messages extends Component<any, isState> {
       note: ''
     })
 
-    checkWedding();
-    
-    _this.onLoadMsg(1);
+    if(checkWedding())  _this.onLoadMsg(1);
 
   }
 

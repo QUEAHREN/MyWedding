@@ -81,6 +81,9 @@ export const checkWedding=()=>{
             url: '/pages/usercenter/usercenter'
           })
         }, 1500)
+        return false
+      } else{
+          return true
       }
   
 }
