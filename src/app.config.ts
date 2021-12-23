@@ -51,5 +51,11 @@ export default {
         "Vistors/Vistors"
       ]
     }
-  ]
+  ],
+  permission: {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于定位效果展示"
+    }
+  }
+
 }

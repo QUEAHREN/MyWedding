@@ -26,7 +26,7 @@ var cos = new COS({
     SecretKey: 'b2IJ4YlhMkrhGahfUAdroZ3Hew8D5kCP',
 });
 
-
+const baseUrl = 'https://101.35.85.119'
 export default class NewWedding extends Component<any, isState> {
 
     constructor() {
@@ -44,9 +44,6 @@ export default class NewWedding extends Component<any, isState> {
         }
     }
 
-    componentDidMount() {
-
-    }
 
     onChange(files) {
         this.setState({
@@ -109,7 +106,7 @@ export default class NewWedding extends Component<any, isState> {
 
     }
 
-    handleCreateWedding = () => {
+    handleCreateWedding = async () => {
 
         const _this = this
         let success = true
@@ -126,14 +123,15 @@ export default class NewWedding extends Component<any, isState> {
             })
         } else {
 
-            Taro.request({
-                url: 'http://127.0.0.1:5000/weddings',
-                method: 'POST',
+            await Taro.cloud.callContainer({
+                path: "/weddings",
+                header: {
+                    "X-WX-SERVICE": "flask1",
+                    "content-type": "application/json"
+                },
+                method: "POST",
                 data: {
                     'nickname': _this.state.nickName,
-                },
-                header: {
-                    'content-type': 'application/json'
                 },
                 success: function (res) {
                     _this.setState({
@@ -141,68 +139,74 @@ export default class NewWedding extends Component<any, isState> {
                     })
                     setWeddingID(res.data.wedding_id)
                     console.log(res.data)
+                    Taro.cloud.callContainer({
+                        path: "/navigation",
+                        header: {
+                            "X-WX-SERVICE": "flask1",
+                            "content-type": "application/json"
+                        },
+                        method: "POST",
+                        data: {
+                            'wedding_id': _this.state.weddingID,
+                            'latitude': _this.state.latitude,
+                            'longitude': _this.state.longitude,
+                            'content': _this.state.content
+                        },
+                        success: function (res) {
+                            console.log(res.data)
+                        },
+                        fail: () => {
+                            success = false
+                        }
+                    })
+                    Taro.cloud.callContainer({
+                        path: "/invitations",
+                        header: {
+                            "X-WX-SERVICE": "flask1",
+                            "content-type": "application/json"
+                        },
+                        method: "POST",
+                        data: {
+                            'wedding_id': _this.state.weddingID,
+                            'invitationUrl': 'https://' + _this.state.invitingUrl,
+                        },
+                        success: function (res) {
+                            console.log(res.data)
+                        },
+                        fail: () => {
+                            success = false
+                        }
+                    })
+                    Taro.cloud.callContainer({
+                        path: "/msgs",
+                        header: {
+                            "X-WX-SERVICE": "flask1",
+                            "content-type": "application/json"
+                        },
+                        method: "POST",
+                        data: {
+                            'wedding_id': _this.state.weddingID,
+                            'context': '小助手祝百年好合~~',
+                            'time': new Date(),
+                            'nickname': '官方小助手',
+                            'avatarUrl': 'https://bkimg.cdn.bcebos.com/pic/7aec54e736d12f2ec1809b2345c2d562843568ef?x-bce-process=image/watermark,image_d2F0ZXIvYmFpa2UyNzI=,g_7,xp_5,yp_5/format,f_auto'
+                        },
+                        fail: () => {
+                            success = false
+                        }
+        
+                    })
                 },
                 fail: () => {
                     success = false
                 }
 
-            }).then(() => {
-                Taro.request({
-                    url: 'http://127.0.0.1:5000/navigation',
-                    method: 'POST',
-                    data: {
-                        'wedding_id': _this.state.weddingID,
-                        'latitude': _this.state.latitude,
-                        'longitude': _this.state.longitude,
-                        'content': _this.state.content
-                    },
-                    header: {
-                        'content-type': 'application/json'
-                    },
-                    success: function (res) {
-
-                        console.log(res.data)
-                    },
-                    fail: () => {
-                        success = false
-                    }
-
-                })
-                Taro.request({
-                    url: 'http://127.0.0.1:5000/invitations',
-                    method: 'POST',
-                    data: {
-                        'wedding_id': _this.state.weddingID,
-                        'invitationUrl': 'https://' + _this.state.invitingUrl,
-                    },
-                    header: {
-                        'content-type': 'application/json'
-                    },
-                    success: function (res) {
-                        console.log(res.data)
-                    },
-                    fail: () => {
-                        success = false
-                    }
-                })
-                Taro.request({
-                    url: 'http://127.0.0.1:5000/msgs',
-                    method: 'POST',
-                    data: {
-                        'wedding_id': _this.state.weddingID,
-                        'context': '小助手祝百年好合~~',
-                        'time': new Date(),
-                        'nickname': '官方小助手',
-                        'avatarUrl': 'https://bkimg.cdn.bcebos.com/pic/7aec54e736d12f2ec1809b2345c2d562843568ef?x-bce-process=image/watermark,image_d2F0ZXIvYmFpa2UyNzI=,g_7,xp_5,yp_5/format,f_auto'
-                    },
-                    header: {
-                        'content-type': 'application/json'
-                    },
-                    fail: () => {
-                        success = false
-                    }
-                })
             })
+
+            
+
+
+
 
             if (success) {
                 Taro.atMessage({
@@ -212,6 +216,9 @@ export default class NewWedding extends Component<any, isState> {
                 setTimeout(function () {
                     Taro.navigateBack()
                 }, 1500)
+            }
+            else {
+                console.log("fail")
             }
 
         }

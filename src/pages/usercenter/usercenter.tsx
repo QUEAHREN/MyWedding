@@ -17,6 +17,7 @@ interface isState {
   content: string
 }
 
+const baseUrl = 'https://101.35.85.119'
 export default class Usercenter extends Component<any, isState> {
 
   constructor() {
@@ -59,14 +60,15 @@ export default class Usercenter extends Component<any, isState> {
 
     const _this = this
 
-    Taro.request({
-      url: 'http://127.0.0.1:5000/weddings',
-      method: 'GET',
+    Taro.cloud.callContainer({
+      path: "/weddings",
+      header: {
+        "X-WX-SERVICE": "flask1",
+        "content-type": "application/json"
+      },
+      method: "GET",
       data: {
         'wedding_id': _this.state.weddingID,
-      },
-      header: {
-        'content-type': 'application/json'
       },
       success: function (res) {
         if (res.data.status === 'success') {
@@ -93,7 +95,44 @@ export default class Usercenter extends Component<any, isState> {
         }
         //console.log(res.data)
       }
+
     })
+
+    // Taro.request({
+    //   url: baseUrl+'/weddings',
+    //   method: 'GET',
+    //   data: {
+    //     'wedding_id': _this.state.weddingID,
+    //   },
+    //   header: {
+    //     'content-type': 'application/json'
+    //   },
+    //   success: function (res) {
+    //     if (res.data.status === 'success') {
+    //       Taro.atMessage({
+    //         'message': '成功加入！',
+    //         'type': 'success',
+    //       })
+    //       setTimeout(function () {
+    //         setWeddingID(_this.state.weddingID)
+    //         _this.setState({
+    //           openAF: false,
+    //           content: '修改当前加入的婚礼:' + getWeddingID()
+    //         })
+    //       }, 1000)
+    //     }
+
+    //     else {
+    //       console.log('fail')
+    //       Taro.atMessage({
+    //         'message': '不存在此邀请码，请确认后输入！',
+    //         'type': 'error',
+    //       })
+
+    //     }
+    //     //console.log(res.data)
+    //   }
+    // })
   }
 
   handleUserinfoClick = () => {

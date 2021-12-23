@@ -23,6 +23,7 @@ interface isState {
   note: any
 }
 
+const baseUrl = 'https://101.35.85.119'
 export default class Messages extends Component<any, isState> {
 
   constructor() {
@@ -49,18 +50,18 @@ export default class Messages extends Component<any, isState> {
 
     const _this = this
 
-    Taro.request({
-      url: 'http://127.0.0.1:5000/msgs',
-      method: 'GET',
+    Taro.cloud.callContainer({
+      path: "/msgs",
+      header: {
+        "X-WX-SERVICE": "flask1",
+        "content-type": "application/json"
+      },
+      method: "GET",
       data: {
         'wedding_id': getWeddingID(),
         'page': newcurrent
       },
-      header: {
-        'content-type': 'application/json'
-      },
       success: function (res) {
-
         _this.setState({
           msgList: res.data,
           total: res.data[res.data.length - 1].msgNumber
@@ -68,6 +69,27 @@ export default class Messages extends Component<any, isState> {
         console.log(res.data)
       }
     })
+
+
+    // Taro.request({
+    //   url: baseUrl+'/msgs',
+    //   method: 'GET',
+    //   data: {
+    //     'wedding_id': getWeddingID(),
+    //     'page': newcurrent
+    //   },
+    //   header: {
+    //     'content-type': 'application/json'
+    //   },
+    //   success: function (res) {
+
+    //     _this.setState({
+    //       msgList: res.data,
+    //       total: res.data[res.data.length - 1].msgNumber
+    //     })
+    //     console.log(res.data)
+    //   }
+    // })
 
   }
 
@@ -91,7 +113,7 @@ export default class Messages extends Component<any, isState> {
       note: ''
     })
 
-    if(checkWedding())  _this.onLoadMsg(1);
+    if (checkWedding()) _this.onLoadMsg(1);
 
   }
 
@@ -153,18 +175,20 @@ export default class Messages extends Component<any, isState> {
   handleSubmitNewMsg = () => {
 
     const _this = this
-    Taro.request({
-      url: 'http://127.0.0.1:5000/msgs',
-      method: 'POST',
+
+    Taro.cloud.callContainer({
+      path: "/msgs",
+      header: {
+        "X-WX-SERVICE": "flask1",
+        "content-type": "application/json"
+      },
+      method: "POST",
       data: {
         'wedding_id': _this.state.weddingID,
         'context': _this.state.newMessage,
         'time': new Date(),
         'nickname': _this.state.nickName,
         'avatarUrl': _this.state.avatarUrl
-      },
-      header: {
-        'content-type': 'application/json'
       },
       success: function (res) {
         _this.onLoadMsg(1)
@@ -186,9 +210,45 @@ export default class Messages extends Component<any, isState> {
           'message': '提交失败',
           'type': 'error',
         })
-      }
-
+      },
     })
+
+    // Taro.request({
+    //   url: baseUrl + '/msgs',
+    //   method: 'POST',
+    //   data: {
+    //     'wedding_id': _this.state.weddingID,
+    //     'context': _this.state.newMessage,
+    //     'time': new Date(),
+    //     'nickname': _this.state.nickName,
+    //     'avatarUrl': _this.state.avatarUrl
+    //   },
+    //   header: {
+    //     'content-type': 'application/json'
+    //   },
+    //   success: function (res) {
+    //     _this.onLoadMsg(1)
+
+    //     Taro.atMessage({
+    //       'message': '成功送上祝福！',
+    //       'type': 'success',
+    //     })
+    //     setTimeout(function () {
+    //       _this.setState({
+    //         addMsg: false,
+    //         newMessage: '',
+    //         current: 1
+    //       })
+    //     }, 1000)
+    //   },
+    //   fail: () => {
+    //     Taro.atMessage({
+    //       'message': '提交失败',
+    //       'type': 'error',
+    //     })
+    //   }
+
+    // })
 
   }
 
@@ -211,18 +271,20 @@ export default class Messages extends Component<any, isState> {
 
   handleAttendSubmit = (event) => {
     const _this = this
-    Taro.request({
-      url: 'http://127.0.0.1:5000/participants',
-      method: 'POST',
+
+    Taro.cloud.callContainer({
+      path: "/participants",
+      header: {
+        "X-WX-SERVICE": "flask1",
+        "content-type": "application/json"
+      },
+      method: "POST",
       data: {
         'wedding_id': _this.state.weddingID,
         'realName': _this.state.realName,
         'phoneNumber': _this.state.phoneNumber,
         'attendance': _this.state.attendance,
         'note': _this.state.note
-      },
-      header: {
-        'content-type': 'application/json'
       },
       success: function (res) {
 
@@ -246,8 +308,46 @@ export default class Messages extends Component<any, isState> {
           'type': 'error',
         })
       }
-
     })
+
+
+    // Taro.request({
+    //   url: baseUrl + '/participants',
+    //   method: 'POST',
+    //   data: {
+    //     'wedding_id': _this.state.weddingID,
+    //     'realName': _this.state.realName,
+    //     'phoneNumber': _this.state.phoneNumber,
+    //     'attendance': _this.state.attendance,
+    //     'note': _this.state.note
+    //   },
+    //   header: {
+    //     'content-type': 'application/json'
+    //   },
+    //   success: function (res) {
+
+    //     Taro.atMessage({
+    //       'message': '成功提交信息！',
+    //       'type': 'success',
+    //     })
+    //     setTimeout(function () {
+    //       _this.setState({
+    //         attendWedding: false,
+    //         attendance: '',
+    //         phoneNumber: '',
+    //         realName: '',
+    //         note: ''
+    //       })
+    //     }, 2000)
+    //   },
+    //   fail: () => {
+    //     Taro.atMessage({
+    //       'message': '提交失败',
+    //       'type': 'error',
+    //     })
+    //   }
+
+    // })
   }
 
   render() {
@@ -292,7 +392,7 @@ export default class Messages extends Component<any, isState> {
         {/* 写留言 */}
         <AtFloatLayout isOpened={this.state.addMsg}
           title="留下你的祝福吧！"
-          >
+        >
           <Text>{"\n"}</Text>
           <AtTextarea
             value={this.state.newMessage}

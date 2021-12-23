@@ -15,6 +15,7 @@ interface isState {
   content: string
 }
 
+const baseUrl = 'https://101.35.85.119'
 export default class Navigation extends Component<any, isState> {
 
   constructor() {
@@ -39,14 +40,15 @@ export default class Navigation extends Component<any, isState> {
 
     checkWedding();
 
-    Taro.request({
-      url: 'http://127.0.0.1:5000/navigation',
-      method: 'GET',
+    Taro.cloud.callContainer({
+      path: "/navigation",
+      header: {
+        "X-WX-SERVICE": "flask1",
+        "content-type": "application/json"
+      },
+      method: "GET",
       data: {
         'wedding_id': _this.state.weddingID,
-      },
-      header: {
-        'content-type': 'application/json'
       },
       success: function (res) {
         _this.setState({
@@ -58,6 +60,26 @@ export default class Navigation extends Component<any, isState> {
       }
 
     })
+
+    // Taro.request({
+    //   url: baseUrl+'/navigation',
+    //   method: 'GET',
+    //   data: {
+    //     'wedding_id': _this.state.weddingID,
+    //   },
+    //   header: {
+    //     'content-type': 'application/json'
+    //   },
+    //   success: function (res) {
+    //     _this.setState({
+    //       latitude: res.data.latitude,
+    //       longitude: res.data.longitude,
+    //       content: res.data.content
+    //     })
+    //     console.log(res.data)
+    //   }
+
+    // })
 
     console.log(_this.state.content)
 

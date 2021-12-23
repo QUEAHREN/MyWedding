@@ -9,6 +9,9 @@ interface isState {
   invitationUrl: string
 }
 
+
+
+const baseUrl = 'https://101.35.85.119'
 export default class Inviting extends Component<any, isState> {
 
   constructor() {
@@ -22,6 +25,10 @@ export default class Inviting extends Component<any, isState> {
 
   componentDidShow () {
 
+    Taro.cloud.init({
+      env: "prod-1gnwp4ild9b65240"
+    })  
+
     const _this = this
     _this.setState({
       weddingID: getWeddingID(),
@@ -30,23 +37,41 @@ export default class Inviting extends Component<any, isState> {
 
       checkWedding();
 
-    Taro.request({
-      url: 'http://127.0.0.1:5000/invitations',
-      method: 'GET',
-      data: {
-        'wedding_id': _this.state.weddingID,
-      },
-      header: {
-        'content-type': 'application/json'
-      },
-      success: function (res) {
-        _this.setState({
-          invitationUrl: res.data.invitationUrl
-        })
-        console.log(res.data)
-      }
+      Taro.cloud.callContainer({
+        path: "/invitations",
+        header: {
+          "X-WX-SERVICE": "flask1",
+          "content-type": "application/json"
+        },
+        method: "GET",
+        data: {
+          "wedding_id": _this.state.weddingID
+        },
+        success: function (res) {
+              _this.setState({
+                invitationUrl: res.data.invitationUrl
+              })
+              console.log(res)
+            }
+      })
 
-    })
+    // Taro.request({
+    //   url: baseUrl + '/invitations',
+    //   method: 'GET',
+    //   data: {
+    //     'wedding_id': _this.state.weddingID,
+    //   },
+    //   header: {
+    //     'content-type': 'application/json'
+    //   },
+    //   success: function (res) {
+    //     _this.setState({
+    //       invitationUrl: res.data.invitationUrl
+    //     })
+    //     console.log(res.data)
+    //   }
+
+    // })
 
   }
 
